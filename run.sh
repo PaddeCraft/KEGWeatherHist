@@ -1,0 +1,1 @@
+flask --app server:app run --debug --port 8080 --host "0.0.0.0"
