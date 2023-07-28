@@ -6,6 +6,12 @@ import datetime
 from enum import Enum
 from pydantic import BaseModel, ValidationError
 
+try:
+    from statistics import fmean as average
+except ImportError:
+    print("[WARN] Cannot import statistics.fmean (Python 3.8+), the slower version statistics.mean will be used instead.")
+    from statistics import mean as average
+
 from config import *
 
 
@@ -114,7 +120,11 @@ class WeatherHistory:
             # Calculate the average and the labels if the interval has passed or we are at the last entry
             if entry["ts"] >= next_ts or i+1 == len(self.history):
                 date = datetime.datetime.fromtimestamp(next_ts)
-                res["entries"].insert(0, sum(avg_tmp) / len(avg_tmp))
+                try:
+                    res["entries"].insert(0, average(avg_tmp))
+                except Exception:
+                    res["entries"].insert(0, 0)
+                    
                 res["labels"].insert(0, date.strftime("%H") if interval == IntervalType.HOURLY else date.strftime("%a, %d.%m.%y"))
                 
                 next_ts += interval.value * 60
@@ -149,7 +159,7 @@ def validate_and_save(data: dict) -> bool:
     """
     global current_data, current_data_time
 
-    # Check if data is valud
+    # Check if data is valid
     try:
         loaded = PostData(**data)
     except ValidationError:
@@ -162,5 +172,6 @@ def validate_and_save(data: dict) -> bool:
     if loaded.meta.timestamp > current_data_time:
         current_data_time = loaded.meta.timestamp
         current_data = loaded.data
+        print(current_data)
 
     return True

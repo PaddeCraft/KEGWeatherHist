@@ -22,7 +22,8 @@ def get(data_type:str, mode:str):
                 return str(current_data.wind.__getattribute__(data_type[5:]))
             else:
                 # Else read from main dictionary
-                return str( current_data.__getattribute__(data_type))
+                print(current_data)
+                return str(current_data.__getattribute__(data_type))
         case "day":
             return history.get_history(ts - 60*60*24, IntervalType.HOURLY, data_type)
         case "week":
@@ -40,13 +41,15 @@ def get(data_type:str, mode:str):
 
 @api.post("/post")
 def post():
-    data = request.json()
+    data = request.json
     
     if not request.is_json:
         abort(400)
 
     if not validate_and_save(data):
         abort(422)
+        
+    return {"status": "ok"}
 
 
 @api.get("/all")
