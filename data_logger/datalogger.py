@@ -43,11 +43,11 @@ def get_data():
     ).text
     d = xmltodict.parse(r)["logger"]
 
-    inside = DefaultValuedDict(d.get("THB"), 0)
-    outside = DefaultValuedDict(d.get("TH"), 0)
-    wind = DefaultValuedDict(d.get("WIND"), 0)
+    inside = DefaultValuedDict(d.get("THB"), None)
+    outside = DefaultValuedDict(d.get("TH"), None)
+    wind = DefaultValuedDict(d.get("WIND"), None)
     # TODO: Fix rain
-    rain = DefaultValuedDict(d.get("RAIN"), 0)
+    rain = DefaultValuedDict(d.get("RAIN"), None)
 
     return inside, outside, wind, rain
 
