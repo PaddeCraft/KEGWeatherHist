@@ -18,8 +18,10 @@ def get(data_type:str, mode:str):
     match mode:
         case "current":
             if data_type[0:4] == "wind":
+                # If data has something to do with wind, load from seperate sub-dictionary
                 return str(current_data.wind.__getattribute__(data_type[5:]))
             else:
+                # Else read from main dictionary
                 return str( current_data.__getattribute__(data_type))
         case "day":
             return history.get_history(ts - 60*60*24, IntervalType.HOURLY, data_type)
@@ -39,6 +41,7 @@ def get(data_type:str, mode:str):
 @api.post("/post")
 def post():
     data = request.json()
+    
     if not request.is_json:
         abort(400)
 
