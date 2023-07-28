@@ -55,10 +55,10 @@ var chartData = [
         type: "line",
         hoursBetween: 24,
         defaultVisibility: [true, false, false, false, false],
-        dateLabel: {
-            hour: "2-digit",
-            minute: "2-digit",
-        },
+        // dateLabel: {
+        //     hour: "2-digit",
+        //     minute: "2-digit",
+        // },
     },
     {
         id: "week",
@@ -99,12 +99,12 @@ var chartData = [
         type: "line",
         hoursBetween: 24,
         defaultVisibility: [true, false, false, false, false],
-        dateLabel: {
-            weekday: "long",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        },
+        // dateLabel: {
+        //     weekday: "long",
+        //     year: "numeric",
+        //     month: "short",
+        //     day: "numeric",
+        // },
     },
     {
         id: "month",
@@ -145,12 +145,12 @@ var chartData = [
         type: "line",
         hoursBetween: 24,
         defaultVisibility: [true, false, false, false, false],
-        dateLabel: {
-            weekday: "long",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        },
+        // dateLabel: {
+        //     weekday: "long",
+        //     year: "numeric",
+        //     month: "short",
+        //     day: "numeric",
+        // },
     },
 ];
 
@@ -200,23 +200,27 @@ async function updateData() {
         for (var index = 0; index < chart.callables.length; index++) {
             var callable = chart.callables[index];
             var [r, g, b] = callable.color;
+
+            var callable_result = await callable.call(...callable.args);
+            labels = callable_result.labels;
+
             datasets.push({
                 label: callable.label,
-                data: await callable.call(...callable.args),
+                data: callable_result.entries,
                 backgroundColor: `rgba(${r}, ${g}, ${b}, 0.4)`,
                 borderColor: `rgba(${r}, ${g}, ${b}, 1)`,
                 borderWidth: 1,
             });
         }
 
-        var now = new Date();
-        for (var index = datasets[0].data.length; index > 0; index--) {
-            labels.push(
-                new Date(
-                    now.getTime() - chart.hoursBetween * 3600000 * index
-                ).toLocaleDateString("de-DE", chart.dateLabel)
-            );
-        }
+        // var now = new Date();
+        // for (var index = datasets[0].data.length; index > 0; index--) {
+        //     labels.push(
+        //         new Date(
+        //             now.getTime() - chart.hoursBetween * 3600000 * index
+        //         ).toLocaleDateString("de-DE", chart.dateLabel)
+        //     );
+        // }
 
         /* -------------------------------------------------------------------------- */
         /*                                Create Charts                               */
@@ -261,7 +265,7 @@ async function updateData() {
     /* -------------------------------------------------------------------------- */
 
     /* ----------------------------- Wind direction ----------------------------- */
-    var windDirection = (await data.getWindDirection("current"))[0];
+    var windDirection = await data.getWindDirection("current");
     var percentage = Math.round((windDirection / 360) * 100);
     document
         .getElementById("winddir-main")
@@ -269,22 +273,21 @@ async function updateData() {
     document.querySelector("#winddir-text").innerText = windDirection;
 
     /* ------------------------------- Temperature ------------------------------ */
-    document.getElementById("live_temp").innerText = (
-        await data.getTemperature("current")
-    )[0];
+    document.getElementById("live_temp").innerText = await data.getTemperature(
+        "current"
+    );
 
     /* ---------------------------------- Rain ---------------------------------- */
-    document.getElementById("live_rain").innerText = (
-        await data.getRain("current")
-    )[0];
+    document.getElementById("live_rain").innerText = await data.getRain(
+        "current"
+    );
 
     /* -------------------------------- Pressure -------------------------------- */
-    document.getElementById("live_pressure").innerText = (
-        await data.getPressure("current")
-    )[0];
+    document.getElementById("live_pressure").innerText = await data.getPressure(
+        "current"
+    );
 
     /* ---------------------------------- Wind ---------------------------------- */
-    document.getElementById("live_windspeed").innerText = (
-        await data.getWindSpeed("current")
-    )[0];
+    document.getElementById("live_windspeed").innerText =
+        await data.getWindSpeed("current");
 }

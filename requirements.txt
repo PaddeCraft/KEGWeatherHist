@@ -1,2 +1,3 @@
 flask
 requests
+pydantic==2.1.1
