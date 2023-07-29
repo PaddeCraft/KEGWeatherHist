@@ -52,11 +52,29 @@ class IntervalType(Enum):
 class WeatherHistory:
     def __init__(self) -> None:
         self.history = []
+        
+        # Initialize current data        
+        self.current_data_time = 0
+        self.current_data = WeatherData(
+            **{
+                "temperature": 0,
+                "humidity": 0,
+                "pressure": 0,
+                "rain": 0,
+                "wind": {"speed": 0, "direction": 0},
+            }
+        )
 
         # If data is present, load it
         if os.path.isfile(HISTORY_FILE):
             with open(HISTORY_FILE, "rb") as hist:
                 self.history = pickle.load(hist)
+            
+            # Load newest data
+            for item in self.history:
+                if item["ts"] > self.current_data_time:
+                    self.current_data_time = item["ts"]
+                    self.current_data = WeatherData(**item["data"])
 
     def load(self, data: WeatherData, timestamp: int):
         """Load data into history
@@ -83,6 +101,11 @@ class WeatherHistory:
         
         # Add new entry to history
         self.history.append({"ts": timestamp, "data": dump})
+        
+        # If newest data, set as current data
+        if timestamp > self.current_data_time:
+            self.current_data_time = timestamp
+            self.current_data = data
 
         # Save to disk
         with open(HISTORY_FILE, "wb") as hist:
@@ -130,48 +153,27 @@ class WeatherHistory:
                 next_ts += interval.value * 60
         
         return res
+    
+    def validate_and_save(self,data: dict) -> bool:
+        """Validates the data and saves it if valid
 
+        Args:
+            data (dict): The data
 
-# ---------------------------------------------------------------------------- #
-#                             Current data tracking                            #
-# ---------------------------------------------------------------------------- #
-current_data_time = 0
-current_data = WeatherData(
-    **{
-        "temperature": 0,
-        "humidity": 0,
-        "pressure": 0,
-        "rain": 0,
-        "wind": {"speed": 0, "direction": 0},
-    }
-)
+        Returns:
+            bool: Returns True if data is valid, False if invalid
+        """
+
+        # Check if data is valid
+        try:
+            loaded = PostData(**data)
+        except ValidationError:
+            return False
+
+        # Save data to history
+        self.load(loaded.data, loaded.meta.timestamp)
+
+        return True
+
 
 history = WeatherHistory()
-
-def validate_and_save(data: dict) -> bool:
-    """Validates the data and saves it if valid
-
-    Args:
-        data (dict): The data
-
-    Returns:
-        bool: Returns True if data is valid, False if invalid
-    """
-    global current_data, current_data_time
-
-    # Check if data is valid
-    try:
-        loaded = PostData(**data)
-    except ValidationError:
-        return False
-
-    # Save data to history
-    history.load(current_data, current_data_time)
-    
-    # If it's the newest data, use as current data
-    if loaded.meta.timestamp > current_data_time:
-        current_data_time = loaded.meta.timestamp
-        current_data = loaded.data
-        print(current_data)
-
-    return True

@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, request
-from data import current_data, validate_and_save, history, IntervalType
+from data import  history, IntervalType
 
 import time
 
@@ -19,11 +19,10 @@ def get(data_type:str, mode:str):
         case "current":
             if data_type[0:4] == "wind":
                 # If data has something to do with wind, load from seperate sub-dictionary
-                return str(current_data.wind.__getattribute__(data_type[5:]))
+                return str(history.current_data.wind.__getattribute__(data_type[5:]))
             else:
                 # Else read from main dictionary
-                print(current_data)
-                return str(current_data.__getattribute__(data_type))
+                return str(history.current_data.__getattribute__(data_type))
         case "day":
             return history.get_history(ts - 60*60*24, IntervalType.HOURLY, data_type)
         case "week":
@@ -46,7 +45,7 @@ def post():
     if not request.is_json:
         abort(400)
 
-    if not validate_and_save(data):
+    if not history.validate_and_save(data):
         abort(422)
         
     return {"status": "ok"}
@@ -54,4 +53,4 @@ def post():
 
 @api.get("/all")
 def get_all():
-    return current_data.model_dump(mode="json")
+    return history.current_data.model_dump(mode="json")
