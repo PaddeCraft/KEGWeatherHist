@@ -6,6 +6,10 @@ import datetime
 from enum import Enum
 from pydantic import BaseModel, ValidationError
 
+from os import environ
+from dotenv import load_dotenv
+from cryptography.fernet import Fernet
+
 try:
     from statistics import fmean as average
 except ImportError:
@@ -34,10 +38,14 @@ class WeatherData(BaseModel):
 class PostMetaData(BaseModel):
     timestamp: int
 
+class DataVerification(BaseModel):
+    res: str
+    enc: str
 
 class PostData(BaseModel):
     meta: PostMetaData
     data: WeatherData
+    verify: DataVerification
 
 
 # ---------------------------------------------------------------------------- #
@@ -169,6 +177,9 @@ class WeatherHistory:
             loaded = PostData(**data)
         except ValidationError:
             return False
+        
+        if not Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).decrypt(loaded.verify.enc.encode("UTF-8")).decode("UTF-8") == loaded.verify.res:
+            return False
 
         # Save data to history
         self.load(loaded.data, loaded.meta.timestamp)
@@ -176,4 +187,5 @@ class WeatherHistory:
         return True
 
 
+load_dotenv()
 history = WeatherHistory()

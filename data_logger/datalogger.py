@@ -1,7 +1,11 @@
+import time
 import requests
 import xmltodict
 
-import time
+from os import environ
+from dotenv import load_dotenv
+
+from cryptography.fernet import Fernet
 
 from default_valued_dict import DefaultValuedDict
 
@@ -17,10 +21,11 @@ DATA_INTERVAL = 5
 # * The url to post the data to
 POST_HOST = "http://localhost/"
 
-
 # ---------------------------------------------------------------------------- #
 #                                     Code                                     #
 # ---------------------------------------------------------------------------- #
+
+load_dotenv()
 
 # ---------------------------- Construct post url ---------------------------- #
 tmp = POST_HOST
@@ -54,9 +59,14 @@ def get_data():
 
 def queue_data():
     global data_queue
-    inside, outside, wind, rain = get_data()
+    
+    try:
+        inside, outside, wind, rain = get_data()
+    except Exception:
+        return
 
     timestamp = int(time.time())
+    verification_phrase = str(time.time())
 
     data = {
         "meta": {"timestamp": timestamp},
@@ -68,6 +78,10 @@ def queue_data():
             "rain": rain["@rate"],
             "wind": {"speed": wind["@wind"], "direction": wind["@dir"]},
         },
+        "verify": {
+            "res": verification_phrase,
+            "enc": Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).encrypt(verification_phrase.encode("UTF-8")).decode("UTF-8")
+        }#
     }
 
     data_queue.append(data)
