@@ -1,8 +1,9 @@
 var tabElements = document.getElementsByClassName("tabsjs");
 var tabElementCount = 1;
+var classToggle = null;
 
 Array.prototype.forEach.call(tabElements, function (e) {
-    var classToggle = e.dataset.classtoggle;
+    classToggle = e.dataset.classtoggle;
     if (classToggle == undefined) {
         classToggle = "";
     }
@@ -19,23 +20,36 @@ Array.prototype.forEach.call(tabElements, function (e) {
         ts.dataset.cnt = tabElementCount;
         ts.classList.add("tabsjs-data-group-" + tabElementCount);
         ts.onclick = function () {
-            var thisGroupClass = "tabsjs-data-group-" + this.dataset.cnt;
             selectTab(this.dataset.tab, tabDict);
-            if (classToggle != "") {
-                var thisGroup = document.getElementsByClassName(thisGroupClass);
-                Array.prototype.forEach.call(thisGroup, function (e) {
-                    e.classList.remove(classToggle);
-                });
-                this.classList.add(classToggle);
-            }
         };
     });
     tabElementCount += 1;
 });
 
 function selectTab(nr, tabs) {
+    history.replaceState(null, "", "/#" + nr);
+    setTabSelectHighlight(parseInt(nr));
+
     for (var [, value] of Object.entries(tabs)) {
         value.style.display = "none";
     }
     tabs[nr].style.display = "block";
+}
+
+function setTabSelectHighlight(nr) {
+    const el = document.querySelector(`.tabsjs-sel[data-tab="${nr}"]`);
+    const thisGroupClass = "tabsjs-data-group-" + el.dataset.cnt;
+    if (classToggle != "") {
+        var thisGroup = document.getElementsByClassName(thisGroupClass);
+        Array.prototype.forEach.call(thisGroup, function (e) {
+            e.classList.remove(classToggle);
+        });
+        el.classList.add(classToggle);
+    }
+}
+
+if (window.location.hash != "") {
+    const tabs = [...document.querySelectorAll(".tabsjs-tab")];
+    const tNr = window.location.hash.slice(1);
+    if (!(isNaN(tNr) || tNr > tabs.length || tNr < 1)) selectTab(tNr, tabs);
 }

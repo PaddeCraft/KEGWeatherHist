@@ -1,25 +1,33 @@
 import * as data from "./data.js";
 
+var mobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+    );
+
+var defaultVisibility = [true, false, false, false, false];
+
+var locStorageEnableData = localStorage.getItem("chart_enabled");
+window.chartCategoriesEnabled = defaultVisibility;
+if (locStorageEnableData) {
+    chartCategoriesEnabled = JSON.parse(locStorageEnableData).data;
+    console.info(
+        "Loaded enabled categories from local storage",
+        chartCategoriesEnabled
+    );
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     updateData();
     setInterval(updateData, 60 * 1000);
-    setInterval(saveToLocalStorage, 500);
+    setInterval(updateVisibilities, 500);
+    console.info("Initialized interval loops");
 });
-
-var mobile = false;
-if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-    )
-) {
-    mobile = true;
-}
 
 var chartData = [
     {
         id: "day",
         lastChartObj: null,
-        lastChartCategoriesEnabled: null,
         callables: [
             {
                 call: data.getTemperature,
@@ -54,16 +62,10 @@ var chartData = [
         ],
         type: "line",
         hoursBetween: 24,
-        defaultVisibility: [true, false, false, false, false],
-        // dateLabel: {
-        //     hour: "2-digit",
-        //     minute: "2-digit",
-        // },
     },
     {
         id: "week",
         lastChartObj: null,
-        lastChartCategoriesEnabled: null,
         callables: [
             {
                 call: data.getTemperature,
@@ -98,18 +100,10 @@ var chartData = [
         ],
         type: "line",
         hoursBetween: 24,
-        defaultVisibility: [true, false, false, false, false],
-        // dateLabel: {
-        //     weekday: "long",
-        //     year: "numeric",
-        //     month: "short",
-        //     day: "numeric",
-        // },
     },
     {
         id: "month",
         lastChartObj: null,
-        lastChartCategoriesEnabled: null,
         callables: [
             {
                 call: data.getTemperature,
@@ -144,50 +138,68 @@ var chartData = [
         ],
         type: "line",
         hoursBetween: 24,
-        defaultVisibility: [true, false, false, false, false],
-        // dateLabel: {
-        //     weekday: "long",
-        //     year: "numeric",
-        //     month: "short",
-        //     day: "numeric",
-        // },
     },
 ];
 
-function saveToLocalStorage() {
-    chartData.forEach(function (chart) {
-        chart.lastChartCategoriesEnabled = [];
+function updateVisibilities() {
+    var changed = false;
+
+    for (var _i = 0; _i < chartData.length; _i++) {
+        var chart = chartData[_i];
+        var enabled = [];
         for (var i = 0; i < chart.callables.length; i++) {
             if (chart.lastChartObj != null) {
                 var meta = chart.lastChartObj.getDatasetMeta(i);
-                chart.lastChartCategoriesEnabled.push(!meta.hidden);
+                enabled.push(!meta.hidden);
+                if (enabled[i] != chartCategoriesEnabled[i]) {
+                    changed = true;
+                }
             }
         }
-        if (chart.lastChartCategoriesEnabled.length > 0) {
-            localStorage.setItem(
-                "chart_" + chart.id,
-                JSON.stringify({ data: chart.lastChartCategoriesEnabled })
-            );
+
+        if (changed) {
+            window.chartCategoriesEnabled = enabled;
+            break;
         }
-    });
+    }
+
+    if (changed) {
+        console.info("Detected change in category selection");
+        localStorage.setItem(
+            "chart_enabled",
+            JSON.stringify({ data: chartCategoriesEnabled })
+        );
+
+        chartData.forEach(function (chart) {
+            for (var i = 0; i < chart.callables.length; i++) {
+                if (chart.lastChartObj != null) {
+                    chart.lastChartObj.setDatasetVisibility(
+                        i,
+                        chartCategoriesEnabled[i]
+                    );
+                    chart.lastChartObj.update("active");
+                } else {
+                    console.warn(
+                        "Chart for id " + chart.id + " has no last chart object"
+                    );
+                }
+            }
+        });
+        console.info("Updated displayed categories");
+    }
 }
 
 async function updateData() {
-    saveToLocalStorage();
+    updateVisibilities();
+    console.info("Updating data");
+    console.time("update_data");
+
     chartData.forEach(async function (chart) {
         // ==========================
         // ==== DELETE OLD CHART ====
         // ==========================
         if (chart.lastChartObj != null) {
             chart.lastChartObj.destroy();
-        } else {
-            if (localStorage.getItem("chart_" + chart.id) == null) {
-                chart.lastChartCategoriesEnabled = chart.defaultVisibility;
-            } else {
-                chart.lastChartCategoriesEnabled = JSON.parse(
-                    localStorage.getItem("chart_" + chart.id)
-                ).data;
-            }
         }
         // =======================
         // ==== GENERATE DATA ====
@@ -252,9 +264,9 @@ async function updateData() {
         /* -------------------------------------------------------------------------- */
         /*                         Restore selected categories                        */
         /* -------------------------------------------------------------------------- */
-        if (chart.lastChartCategoriesEnabled != null) {
+        if (chartCategoriesEnabled != null) {
             for (var index = 0; index < chart.callables.length; index++) {
-                var enabled = chart.lastChartCategoriesEnabled[index];
+                var enabled = chartCategoriesEnabled[index];
                 chart.lastChartObj.setDatasetVisibility(index, enabled);
             }
             chart.lastChartObj.update();
@@ -290,4 +302,7 @@ async function updateData() {
     /* ---------------------------------- Wind ---------------------------------- */
     document.getElementById("live_windspeed").innerText =
         await data.getWindSpeed("current");
+
+    console.timeEnd("update_data");
+    console.info("Finished updating data");
 }
