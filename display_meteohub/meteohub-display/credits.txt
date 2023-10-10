@@ -1,0 +1,6 @@
+------------------
+Meteohub -- Display
+-----------------
+Orginal Program by live.meteoware.de
+Changed by https://github.com/PaddeCraft (Patrick)
+In cooperation with https://github.com/NprogramDev (Noah)

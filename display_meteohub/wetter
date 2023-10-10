@@ -1,0 +1,13 @@
+#!/bin/bash
+killall python
+killall chromium-browser
+cd /home/meteohub/meteohub-display/
+pip install -r requirements.txt
+python update_data.py &
+sleep 2
+echo -------------------------------------------------------------------------
+echo Startet in 5 s
+echo -------------------------------------------------------------------------
+sleep 5
+chromium-browser --chrome --kiosk http://localhost:8080/ --no-sandbox --force-device-scale-factor=1.5
+

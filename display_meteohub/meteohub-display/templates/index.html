@@ -1,0 +1,47 @@
+<html lang="de">
+    <head>
+        <title>Animierte Wetteranzeige für MeteoHub</title>
+        <meta
+            name="description"
+            content="Animierte Instrumentenanzeige für das Programm MeteoHub für die Darstellung von Wetterdaten einer Wetterstation"
+        />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- style datei -->
+        <link rel="stylesheet" href="/static/style-2.5.min.css" />
+        <style>
+            body {
+                display: flex;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- platzhalter instrumentenanzeige -->
+        <div class="gauge-container-light gauge-custom" id="mwp-app"></div>
+    </body>
+
+    <!-- anfang script -->
+    <script>
+        // Display configuration,
+        const mwconfig = {
+            url: "/data",
+            type: "TPL_MEHUB",
+            animation: 2000,
+            lang: "de",
+        };
+
+        // ------------------------------ Reloading ------------------------------
+        // Interval in minutes, can be changed in the server constants
+        const reloadInterval = parseInt("{{ interval }}");
+        setTimeout(() => {
+            location.reload();
+        }, 60000 * reloadInterval);
+    </script>
+    <script src="/static/mwdisplay-2.5.min.js"></script>
+    <!-- ende script -->
+    {{ ip }}
+</html>
