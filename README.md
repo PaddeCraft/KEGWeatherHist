@@ -8,7 +8,7 @@ To install the requirements:
 ## Deploying the docker container
 
 ```shell
-docker run -d --rm ghcr.io/PaddeCraft/keg-weather-history-webserver:latest -v <storage path>:/data -v </path/to/.env>:/server/.env
+docker run -d --rm ghcr.io/PaddeCraft/keg-weather-history-webserver:latest -v <storage path>:/data -v </path/to/.env>:/server/.env -p <port>:8080
 ```
 
 ## Credits
