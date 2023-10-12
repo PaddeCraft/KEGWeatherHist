@@ -1,6 +1,6 @@
 name: publish
 
-on: [release]
+on: [release, workflow_dispatch]
 
 jobs:
     publish:
@@ -12,7 +12,7 @@ jobs:
             - name: Build the docker image
               run: |
                   echo $CR_PAT | docker login ghcr.io -u PaddeCraft --password-stdin
-                  docker build -t ghcr.io/PaddeCraft/keg-weather-history-webserver:latest .
-                  docker push ghcr.io/PaddeCraft/keg-weather-history-webserver:latest
+                  docker build -t ghcr.io/paddecraft/keg-weather-history-webserver:latest .
+                  docker push ghcr.io/paddecraft/keg-weather-history-webserver:latest
               env:
                   CR_PAT: ${{ secrets.CR_PAT }}
