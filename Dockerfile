@@ -12,7 +12,7 @@ COPY requirements.txt /server
 
 WORKDIR /server
 
-RUN apk add python3 && \
+RUN apk add python3 bash && \
     python3 -m ensurepip && \
     python3 -m pip install -r requirements.txt && \
     rm requirements.txt && \
