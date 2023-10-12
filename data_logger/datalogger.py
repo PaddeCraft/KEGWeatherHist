@@ -59,7 +59,7 @@ def get_data():
 
 def queue_data():
     global data_queue
-    
+
     try:
         inside, outside, wind, rain = get_data()
     except Exception:
@@ -80,8 +80,10 @@ def queue_data():
         },
         "verify": {
             "res": verification_phrase,
-            "enc": Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).encrypt(verification_phrase.encode("UTF-8")).decode("UTF-8")
-        }#
+            "enc": Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
+            .encrypt(verification_phrase.encode("UTF-8"))
+            .decode("UTF-8"),
+        },  #
     }
 
     data_queue.append(data)

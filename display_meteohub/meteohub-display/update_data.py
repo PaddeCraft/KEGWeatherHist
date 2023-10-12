@@ -14,10 +14,10 @@ webserverIP = ""
 #                                   Constants                                  #
 # ---------------------------------------------------------------------------- #
 
-#* The MeteoHub IP
+# * The MeteoHub IP
 #! Change to the correct ip
 METEOHUB_IP = "172.16.210.220"
-#* The interval to update the data, in minutes
+# * The interval to update the data, in minutes
 DATA_INTERVAL = 5
 
 
@@ -44,7 +44,7 @@ class DefaultValuedDict:
 
 def update():
     d = None
-    
+
     try:
         r = requests.get(
             f"http://{METEOHUB_IP}/meteolog.cgi?type=xml&quotes=1&mode=data&info=station&info=utcdate&info=sensorids"
@@ -74,7 +74,10 @@ def data():
             "pressure": {"v": inside["@press"]},
             "humidity": {"v": outside["@hum"]},
             # TODO: Fix rain
-            "precipitation": [{"v": rain["@rate"], "p": "rate"}, {"v": 0.00, "p": "last60m"}],
+            "precipitation": [
+                {"v": rain["@rate"], "p": "rate"},
+                {"v": 0.00, "p": "last60m"},
+            ],
             "wind": {
                 "speed": {"v": wind["@wind"]},
                 "gust": {"v": wind["@gust"]},

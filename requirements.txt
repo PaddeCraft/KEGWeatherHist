@@ -1,5 +1,9 @@
 flask
+flask-limiter
+
+pillow
 requests
+pydantic==2.1.1
+
 cryptography
 python-dotenv
-pydantic==2.1.1

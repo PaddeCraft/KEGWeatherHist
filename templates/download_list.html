@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Download | Wetterstation KEG Amorbach</title>
+        <link rel="stylesheet" href="/static/css/main.css" />
+    </head>
+    <body class="p-5 prose">
+        <h1>Wetterdaten herunterladen</h1>
+        {% for download in downloads %}
+        <div class="bg-slate-300 dark:bg-slate-700 rounded-md p-3 mb-3">
+            <span class="text-lg">{{ download["name"] }}</span>
+            <a href="{{ download["link"] }}" class="link">Download...</a>
+        </div>
+        {% endfor %}
+    </body>
+</html>

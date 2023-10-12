@@ -1,0 +1,1 @@
+{ "scripts": {"css": "bunx tailwindcss -i src.css -o static/css/main.css -w"}, "dependencies": { "@tailwindcss/typography": "^0.5.10", "daisyui": "^3.9.2" } }

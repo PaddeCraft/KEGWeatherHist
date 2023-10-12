@@ -29,133 +29,143 @@
             </div>
         </div>
         <div class="pb-6"></div>
-        <div class="tabsjs prose" data-classtoggle="tab-active">
-            <div class="tabs">
-                <span
-                    class="tab tab-bordered tabsjs-sel tab-active"
-                    data-tab="0"
-                    >Liveübersicht
-                </span>
-                <span class="tab tab-bordered tabsjs-sel" data-tab="1"
-                    >Tagesübersicht
-                </span>
-                <span class="tab tab-bordered tabsjs-sel" data-tab="2"
-                    >Wochenübersicht
-                </span>
-                <span class="tab tab-bordered tabsjs-sel" data-tab="3"
-                    >Monatsübersicht
-                </span>
-                <span class="tab tab-bordered tabsjs-sel" data-tab="4"
-                    >Informationen
-                </span>
-            </div>
-            <div class="tabsjs-tab" data-tab="0">
-                <h2>Liveübersicht</h2>
-                <div></div>
-                <div class="pt-8 items-center">
-                    <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
-                        <span class="text-xl"
-                            >Temperatur: <strong><span id="live_temp">--</span> °C</span
-                            ></strong>
-                    </div>
-                    <br />
-                    <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
-                        <span class="text-xl"
-                            >Regenrate: <strong><span id="live_rain">--</span> mm/m²</span
-                            ></strong>
-                    </div>
-                    <br />
-                    <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
-                        <span class="text-xl"
-                            >Luftdruck: <strong><span id="live_pressure">--</span> hpa</span
-                            ></strong>
-                    </div>
-                    <br />
-                    <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
-                        <span class="text-xl"
-                            >Windgeschwindigkeit: <strong><span id="live_windspeed">--</span> km/h</span
-                            ></strong>
-                    </div>
-                    <br /><br />
-                    <div
-                        class="radial-progress"
-                        style="--value: 70; --size: 14em"
-                        id="winddir-main"
-                        >
-                        <span>
-                        Windrichtung:
-                        <span class="pl-2" id="winddir-text">--</span> °
-                        </span>
+        <noscript>
+            <p class="pb-3 text-xl">F&uuml;r eine bessere Erfahrung, schalten Sie JavaScript ein und laden Sie die Seite neu.</p>
+            <img src="/api/img/temperature/month?header=Temperatur (Monatsübersicht)" alt="">
+            <img src="/api/img/rain/month?header=Regenrate (Monatsübersicht)" alt="">
+            <img src="/api/img/pressure/month?header=Luftdruck (Monatsübersicht)" alt="">
+            <img src="/api/img/wind_speed/month?header=Windgeschwindigkeit (Monatsübersicht)" alt="">
+        </noscript>
+        <div id="js_enabled" style="display: none;">
+            <div class="tabsjs prose" data-classtoggle="tab-active">
+                <div class="tabs">
+                    <span
+                        class="tab tab-bordered tabsjs-sel tab-active"
+                        data-tab="0"
+                        >Live&uuml;bersicht
+                    </span>
+                    <span class="tab tab-bordered tabsjs-sel" data-tab="1"
+                        >Tages&uuml;bersicht
+                    </span>
+                    <span class="tab tab-bordered tabsjs-sel" data-tab="2"
+                        >Wochen&uuml;bersicht
+                    </span>
+                    <span class="tab tab-bordered tabsjs-sel" data-tab="3"
+                        >Monats&uuml;bersicht
+                    </span>
+                    <span class="tab tab-bordered tabsjs-sel" data-tab="4"
+                        >Informationen
+                    </span>
+                </div>
+                <div class="tabsjs-tab" data-tab="0">
+                    <h2>Live&uuml;bersicht</h2>
+                    <div></div>
+                    <div class="pt-8 items-center">
+                        <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                            <span class="text-xl"
+                                >Temperatur: <strong><span id="live_temp">--</span> &deg;C</span
+                                ></strong>
+                        </div>
+                        <br />
+                        <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                            <span class="text-xl"
+                                >Regenrate: <strong><span id="live_rain">--</span> mm/m<sup>2</sup></span
+                                ></strong>
+                        </div>
+                        <br />
+                        <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                            <span class="text-xl"
+                                >Luftdruck: <strong><span id="live_pressure">--</span> hpa</span
+                                ></strong>
+                        </div>
+                        <br />
+                        <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                            <span class="text-xl"
+                                >Windgeschwindigkeit: <strong><span id="live_windspeed">--</span> km/h</span
+                                ></strong>
+                        </div>
+                        <br /><br />
+                        <div
+                            class="radial-progress"
+                            style="--value: 70; --size: 14em"
+                            id="winddir-main"
+                            >
+                            <span>
+                            Windrichtung:
+                            <span class="pl-2" id="winddir-text">--</span> &deg;
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="tabsjs-tab" data-tab="1">
-                <h2>Tagesübersicht</h2>
-                <canvas id="day" class="w-full h-full"></canvas>
-            </div>
-            <div class="tabsjs-tab" data-tab="2">
-                <h2>Wochenübersicht</h2>
-                <canvas id="week" class="w-full h-full"></canvas>
-            </div>
-            <div class="tabsjs-tab" data-tab="3">
-                <h2>Monatsübersicht</h2>
-                <canvas id="month" class="w-full h-full"></canvas>
-            </div>
-            <div class="tabsjs-tab" data-tab="4">
-                <h2>Über das Projekt</h2>
-                <p>
-                    Im Rahmen des Projektsseminars „Errichtung einer
-                    Wetterstation“ der Schuljahre 2012-2014 bauten Schülerinnen
-                    und Schüler der 12. Klasse eine funktionstüchtige
-                    Wetterstation auf dem Schulgelände des Karl-Ernst-Gymnasiums
-                    Amorbach.
-                </p>
-                <p>
-                    Im Jahr 2022 wurde die Wetterstation im Rahmen einer
-                    Projektwoche wiederaufbereitet. Geholfen haben verschiedene
-                    Schülerinnen und Schüler aus der Unter- und Mittelstufe.
-                </p>
-                <h3>Technische Informationen</h3>
-                <ul>
-                    <li><strong>Oregon Scientific WMR 200 Funk</strong></li>
-                    <li class="list-none">
-                        <ul>
-                            <li>Innenstation mit Datenlogger</li>
-                            <li>Regenmesser PCR800</li>
-                            <li>Windmesser WGR800</li>
-                            <li>Solarpanel STC800</li>
-                            <li>
-                                Temperatur- und Luftfeuchtigkeitsmesser THGN801
-                            </li>
-                        </ul>
-                    </li>
-                    <li><strong>Erhobene Daten</strong></li>
-                    <li class="list-none">
-                        <ul>
-                            <li>Temperatur</li>
-                            <li>Luftfeuchtigkeit</li>
-                            <li>Luftdruck</li>
-                            <li>Regenmenge</li>
-                            <li>Windgeschwindigkeit</li>
-                            <li>Windrichtung</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong>Zeitintervall der erhobenen Daten</strong>
-                    </li>
-                    <li class="list-none">
-                        <ul>
-                            <li>Live-Daten (1 Tag)</li>
-                            <li>1 Woche</li>
-                            <li>1 Monat</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong>
+                <div class="tabsjs-tab" data-tab="1">
+                    <h2>Tages&uuml;bersicht</h2>
+                    <canvas id="day" class="w-full h-full"></canvas>
+                </div>
+                <div class="tabsjs-tab" data-tab="2">
+                    <h2>Wochen&uuml;bersicht</h2>
+                    <canvas id="week" class="w-full h-full"></canvas>
+                </div>
+                <div class="tabsjs-tab" data-tab="3">
+                    <h2>Monats&uuml;bersicht</h2>
+                    <canvas id="month" class="w-full h-full"></canvas>
+                </div>
+                <div class="tabsjs-tab" data-tab="4">
+                    <h2>&Uuml;ber das Projekt</h2>
+                    <p>
+                        Im Rahmen des Projektsseminars 	
+                        &quot;Errichtung einer
+                        Wetterstation&quot; der Schuljahre 2012-2014 bauten Sch&uuml;lerinnen
+                        und Sch&uuml;ler der 12. Klasse eine funktionst&uuml;chtige
+                        Wetterstation auf dem Schulgel&uuml;nde des Karl-Ernst-Gymnasiums
+                        Amorbach.
+                    </p>
+                    <p>
+                        Im Jahr 2022 wurde die Wetterstation im Rahmen einer
+                        Projektwoche wiederaufbereitet. Geholfen haben verschiedene
+                        Sch&uuml;lerinnen und Sch&uuml;ler aus der Unter- und Mittelstufe.
+                    </p>
+                    <h3>Technische Informationen</h3>
+                    <ul>
+                        <li><strong>Oregon Scientific WMR 200 Funk</strong></li>
+                        <li class="list-none">
+                            <ul>
+                                <li>Innenstation mit Datenlogger</li>
+                                <li>Regenmesser PCR800</li>
+                                <li>Windmesser WGR800</li>
+                                <li>Solarpanel STC800</li>
+                                <li>
+                                    Temperatur- und Luftfeuchtigkeitsmesser THGN801
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Erhobene Daten</strong></li>
+                        <li class="list-none">
+                            <ul>
+                                <li>Temperatur</li>
+                                <li>Luftfeuchtigkeit</li>
+                                <li>Luftdruck</li>
+                                <li>Regenmenge</li>
+                                <li>Windgeschwindigkeit</li>
+                                <li>Windrichtung</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Zeitintervall der erhobenen Daten</strong>
+                        </li>
+                        <li class="list-none">
+                            <ul>
+                                <li>Live-Daten (1 Tag)</li>
+                                <li>1 Woche</li>
+                                <li>1 Monat</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>
                             Wetter-Server: RaspberryPi 3
-                        </strong>
-                    </li>
-                </ul>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="pb-12"></div>
@@ -163,6 +173,16 @@
             class="footer footer-center p-8 bg-slate-300 dark:bg-slate-700 text-base-content rounded-lg"
             >
             <div>
+                <a
+                    href="/download"
+                    class="link link-hover"
+                    >Wetterdaten herunterladen
+                </a>
+                <a
+                    href="/api/docs"
+                    class="link link-hover"
+                    >API-Dokumentation
+                </a>
                 <a
                     href="https://www.amorgym.de/impressum/"
                     class="link link-hover"
@@ -176,7 +196,7 @@
                 <a
                     href="https://www.amorgym.de/datenschutzerklaerung/"
                     class="link link-hover"
-                    >Datenschutzerklärung </a
+                    >Datenschutzerkl&auml;rung </a
                     ><br />
                 <div class="grid grid-flow-col gap-4">
                     <a href="https://www.instagram.com/kegamorbach/">
@@ -204,9 +224,12 @@
                 </div>
             </div>
             <div>
-                <p>Copyright © {{ year }} KEG Amorbach. Alle Rechte vorbehalten.</p>
+                <p>Copyright &copy; {{ year }} KEG Amorbach. Alle Rechte vorbehalten.</p>
                 <p>Programmiert von <a href="https://github.com/NprogramDev" class="link">Noah Pani</a> und <a href="https://github.com/PaddeCraft" class="link">Patrick Ulbricht</a></p>
             </div>
         </footer>
+        <script>
+            document.getElementById("js_enabled").style.display = null;
+        </script>
     </body>
 </html>
