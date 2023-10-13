@@ -79,32 +79,6 @@ class WeatherHistory:
             }
         )
 
-        # TODO: Remove
-        self.load(
-            WeatherData(
-                **{
-                    "temperature": 23,
-                    "humidity": 432,
-                    "pressure": 54,
-                    "rain": 123,
-                    "wind": {"speed": 2, "direction": 5},
-                }
-            ),
-            time.time() - 86400,
-        )
-        self.load(
-            WeatherData(
-                **{
-                    "temperature": 25,
-                    "humidity": 434,
-                    "pressure": 543,
-                    "rain": 143,
-                    "wind": {"speed": 2, "direction": 5},
-                }
-            ),
-            time.time(),
-        )
-
         # If data is present, load it
         if os.path.isfile(HISTORY_FILE):
             with open(HISTORY_FILE, "rb") as hist:
