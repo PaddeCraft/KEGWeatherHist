@@ -202,6 +202,10 @@ class WeatherHistory:
             == loaded.verify.res
         ):
             return False
+            
+        for i in self.history:
+            if i["ts"] == loaded.meta.timestamp:
+                return False
 
         # Save data to history
         self.load(loaded.data, loaded.meta.timestamp)
