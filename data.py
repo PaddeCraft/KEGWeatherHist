@@ -6,6 +6,9 @@ import datetime
 from enum import Enum
 from pydantic import BaseModel, ValidationError
 
+import hashlib
+import json as jsON
+
 from os import environ
 from dotenv import load_dotenv
 from cryptography.fernet import Fernet
@@ -42,7 +45,7 @@ class PostMetaData(BaseModel):
 
 
 class DataVerification(BaseModel):
-    res: str
+    hash: str
     enc: str
 
 
@@ -194,15 +197,30 @@ class WeatherHistory:
             loaded = PostData(**data)
         except ValidationError:
             return False
+        try:
+            m = hashlib.sha256()
+            m.update(loaded.data.model_dump_json().encode("UTF-8"))
 
-        if (
-            not Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
-            .decrypt(loaded.verify.enc.encode("UTF-8"))
-            .decode("UTF-8")
-            == loaded.verify.res
-        ):
+            notOrginalHash = m.digest()
+            orignalHash = Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).decrypt(
+                loaded.verify.hash
+            )
+
+            timestampVal = (
+                Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
+                .decrypt(str(loaded.verify.enc).encode("UTF-8"))
+                .decode("UTF-8")
+            )
+            if orignalHash != notOrginalHash or str(timestampVal) != str(
+                loaded.meta.timestamp
+            ):
+                print(
+                    f"Validation failed: is Hash not equal: {orignalHash != notOrginalHash} \n Server Hash ${notOrginalHash} ,\n Request Hash ${orignalHash} ,\n Server Timestamp: ${timestampVal},\n Request Timestamp: ${loaded.meta.timestamp} "
+                )
+                return False
+        except Exception as e:
+            print("Error:", e)
             return False
-            
         for i in self.history:
             if i["ts"] == loaded.meta.timestamp:
                 return False

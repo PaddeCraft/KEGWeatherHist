@@ -72,7 +72,7 @@ def generate_graph(
     if len(data) > 0:
         label_imgs = [_rotated_text(label, rotation=90) for label in reversed(labels)]
         label_height = max([img.height for img in label_imgs]) + 2 * PADDING
-        
+
         data_difference = max(data) - min(data)
         data_y_labels = list(
             reversed(
@@ -161,14 +161,14 @@ def generate_graph(
 
     else:
         # --------------------------- If no data available --------------------------- #
-        
+
         no_data_text = _rotated_text(
             "Keine Daten im ausgewählten Bereich.", 30, font_header
         )
-        
+
         x = int(graph_offset_x + ((graph_width - no_data_text.width) / 2))
         y = int(graph_offset_y + ((graph_height - no_data_text.height) / 2))
-        
+
         image.paste(no_data_text, (x, y), no_data_text)
 
     # ---------------------------------- Header ---------------------------------- #

@@ -10,19 +10,29 @@ init_limiter(app)
 DOWNLOAD_LIST_POSSIBILITIES = []
 
 for data_type in [
-        {"name": "Temperatur", "type": "temperature"},
-        {"name": "Luftfeuchtigkeit", "type": "humidity"},
-        {"name": "Luftdruck", "type": "pressure"},
-        {"name": "Regenfall", "type": "rain"},
-        {"name": "Windgeschwindigkeit", "type": "wind_speed"},
-        {"name": "Windrichtung", "type": "wind_direction"},
+    {"name": "Temperatur", "type": "temperature"},
+    {"name": "Luftfeuchtigkeit", "type": "humidity"},
+    {"name": "Luftdruck", "type": "pressure"},
+    {"name": "Regenfall", "type": "rain"},
+    {"name": "Windgeschwindigkeit", "type": "wind_speed"},
+    {"name": "Windrichtung", "type": "wind_direction"},
+]:
+    for mode in [
+        {"name": "Tag", "mode": "day"},
+        {"name": "Woche", "mode": "week"},
+        {"name": "Monat", "mode": "month"},
     ]:
-    for mode in [{"name": "Tag", "mode": "day"}, {"name": "Woche", "mode": "week"}, {"name": "Monat", "mode": "month"}]:
-        for data_format in [{"name": "Graph", "format": "image"}, {"name": "Json", "format": "json"}]:
-            DOWNLOAD_LIST_POSSIBILITIES.append({
-                "name": f"{data_format['name']} ({data_type['name']}, {mode['name']})",
-                "link": f"/download/{data_format['format']}/{data_type['type']}/{mode['mode']}"
-            })
+        for data_format in [
+            {"name": "Graph", "format": "image"},
+            {"name": "Json", "format": "json"},
+        ]:
+            DOWNLOAD_LIST_POSSIBILITIES.append(
+                {
+                    "name": f"{data_format['name']} ({data_type['name']}, {mode['name']})",
+                    "link": f"/download/{data_format['format']}/{data_type['type']}/{mode['mode']}",
+                }
+            )
+
 
 @app.route("/")
 def index():
