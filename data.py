@@ -148,16 +148,22 @@ class WeatherHistory:
         # Iterate through every entry in the history
         for i, entry in enumerate(sorted(self.history, key=lambda x: x["ts"])):
             # If the entry isn't even in the selected range, ignore it
-            if not entry["ts"] >= start_ts:
+            if entry["ts"] < start_ts:
                 continue
+
+            if i == 0:
+                while entry["ts"] > next_ts:
+                    next_ts += interval.value * 60
+                next_ts -= interval.value * 60
+
+            avg_tmp.append(entry["data"][key])
+            date_tmp.append(entry["ts"])
 
             # Add the entry if it's in the current interval or if it's the last
             if entry["ts"] > next_ts or i + 1 == len(self.history):
-                avg_tmp.append(entry["data"][key])
-                date_tmp.append(entry["ts"])
+                print(entry["ts"], next_ts, i + 1 == len(self.history))
 
-            # Calculate the average and the labels if the interval has passed or we are at the last entry
-            if entry["ts"] >= next_ts or i + 1 == len(self.history):
+                # Calculate the average and the labels if the interval has passed or we are at the last entry
                 try:
                     date = datetime.datetime.fromtimestamp(average(date_tmp))
                 except Exception:
@@ -165,18 +171,20 @@ class WeatherHistory:
                     date = datetime.datetime.fromtimestamp(0)
 
                 try:
-                    res["entries"].insert(0, average(avg_tmp))
+                    res["entries"].append(average(avg_tmp))
                 except Exception:
-                    res["entries"].insert(0, 0)
+                    res["entries"].append(0)
 
-                res["labels"].insert(
-                    0,
-                    date.strftime("%H")
+                res["labels"].append(
+                    date.strftime("%H:00")
                     if interval == IntervalType.HOURLY
                     else date.strftime("%a, %d.%m.%y"),
                 )
 
-                next_ts += interval.value * 60
+                # print(next_ts, date_tmp, avg_tmp)
+
+                while entry["ts"] > next_ts:
+                    next_ts += interval.value * 60
                 date_tmp = []
                 avg_tmp = []
 

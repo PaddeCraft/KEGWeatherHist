@@ -69,8 +69,10 @@ def generate_graph(
     footer = _text(footer, color=LIGHT_GRAY)
     footer_height = footer.height + PADDING
 
+    data = list(reversed(data))
+
     if len(data) > 0:
-        label_imgs = [_rotated_text(label, rotation=90) for label in reversed(labels)]
+        label_imgs = [_rotated_text(label, rotation=90) for label in labels]
         label_height = max([img.height for img in label_imgs]) + 2 * PADDING
 
         data_difference = max(data) - min(data)
@@ -142,6 +144,7 @@ def generate_graph(
             x, y = generate_entry_pos(
                 data, i, graph_offset_x, graph_offset_y, distance_x, distance_y
             )
+
             if i < len(data) - 1:
                 # Connect this and the next point with a line
                 x2, y2 = generate_entry_pos(
