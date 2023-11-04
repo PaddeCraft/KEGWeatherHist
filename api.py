@@ -73,7 +73,7 @@ def get_data(data_type: str, mode: str, allow_current: bool):
 
 
 @api.get("/<string:data_type>/<string:mode>")
-@limiter.limit("40 per minute")
+@limiter.limit("400 per minute")
 def get(data_type: str, mode: str):
     is_download = request.args.get("mode") == "download"
     data = get_data(data_type, mode, not is_download)

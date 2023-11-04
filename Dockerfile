@@ -6,12 +6,13 @@ VOLUME [ "/data" ]
 
 COPY run_prod.sh /server
 
+COPY .env /server
+COPY *.py /server
+COPY requirements.txt /server
+
 COPY assets/ /server/assets/
 COPY static/ /server/static/
 COPY templates/ /server/templates/
-
-COPY *.py /server
-COPY requirements.txt /server
 
 WORKDIR /server
 
