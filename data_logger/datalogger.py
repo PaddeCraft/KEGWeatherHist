@@ -20,7 +20,7 @@ from default_valued_dict import DefaultValuedDict
 # ! Change to the correct ip
 METEOHUB_IP = "172.16.210.220"
 # * The interval to collect data, in minutes
-DATA_INTERVAL = 0.1
+DATA_INTERVAL = 5
 # * The url to post the data to
 POST_HOST = "http://localhost:8080/"
 

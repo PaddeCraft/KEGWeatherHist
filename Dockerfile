@@ -2,6 +2,8 @@ FROM alpine:latest
 
 RUN mkdir /server
 
+VOLUME [ "/data" ]
+
 COPY run_prod.sh /server
 
 COPY assets/ /server/assets/
