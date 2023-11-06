@@ -6,7 +6,6 @@ VOLUME [ "/data" ]
 
 COPY run_prod.sh /server
 
-COPY .env /server
 COPY *.py /server
 COPY requirements.txt /server
 
