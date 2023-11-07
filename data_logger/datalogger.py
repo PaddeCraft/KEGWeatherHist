@@ -79,14 +79,29 @@ def queue_data():
         return
 
     timestamp = int(time.time())
-    datx = {
-        "temperature": outside["@temp"],
-        "humidity": outside["@hum"],
-        "pressure": inside["@press"],
-        # TODO: Fix rain
-        "rain": rain["@rate"],
-        "wind": {"speed": wind["@wind"], "direction": wind["@dir"]},
-    }
+    datx = {}
+
+    if outside["@temp"] != None:
+        datx["temperature"] = float(outside["@temp"])
+    if outside["@hum"] != None:
+        datx["humidity"] = float(outside["@hum"])
+    if inside["@press"] != None:
+        datx["pressure"] = int(float(inside["@press"]))
+    if rain["@rate"] != None:
+        datx["rain"] = float(rain["@rate"])
+
+    if wind["@wind"] != None and wind["@dir"] != None:
+        datx["wind"] = {"speed": float(wind["@wind"]), "direction": int(float(wind["@dir"]))}
+    
+    #datx = {
+    #    "temperature": outside["@temp"],
+    #    "humidity": outside["@hum"],
+    #    "pressure": inside["@press"],
+    #    # TODO: Fix rain
+    #    "rain": rain["@rate"],
+    #    "wind": {"speed": wind["@wind"], "direction": wind["@dir"]},
+    #}
+    
     m = hashlib.sha256()
     m.update(jsON.dumps(datx, separators=(",", ":")).encode("UTF-8"))
 
