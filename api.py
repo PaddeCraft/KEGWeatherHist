@@ -6,6 +6,8 @@ from datetime import datetime
 import json
 import time
 
+from typed_env import *
+
 from data import history, IntervalType
 
 from graph_generation import (
@@ -16,12 +18,33 @@ from graph_generation import (
     MAX_GRAPH_HEIGHT,
 )
 
+RATE_LIMIT_REGEX = regex(r"^\d+ (per|\/) (\d+)? (second|minute|hour|day|month|year)s?$")
+
+# ---------------------------------------------------------------------------- #
+#                                      Env                                     #
+# ---------------------------------------------------------------------------- #
+
+env_vars = [
+    v("VERIFICATION_KEY", str),
+    v("RATE_LIMITING_ENABLED", bool, OPTIONAL),
+    v("RATE_LIMITING_SINGLE_PROPERTY", RATE_LIMIT_REGEX, OPTIONAL),
+    v("RATE_LIMITING_GRAPH_GENERATION", RATE_LIMIT_REGEX, OPTIONAL),
+    v("RATE_LIMITING_DATA_DUMP", RATE_LIMIT_REGEX, OPTIONAL),
+]
+
+env = load_env(env_vars)
+
+# ---------------------------------------------------------------------------- #
+#                                     Code                                     #
+# ---------------------------------------------------------------------------- #
+
 api = Blueprint("api", __name__)
 
 limiter = limiter = Limiter(
     get_remote_address,
     storage_uri="memory://",
 )
+limiter.enabled = env.get("RATE_LIMITING_ENABLED", True)
 
 
 def init_limiter(app):
@@ -73,7 +96,7 @@ def get_data(data_type: str, mode: str, allow_current: bool):
 
 
 @api.get("/<string:data_type>/<string:mode>")
-@limiter.limit("400 per minute")
+@limiter.limit(env.get("RATE_LIMITING_SINGLE_PROPERTY", "400 per minute"))
 def get(data_type: str, mode: str):
     is_download = request.args.get("mode") == "download"
     data = get_data(data_type, mode, not is_download)
@@ -95,7 +118,7 @@ def get(data_type: str, mode: str):
 
 
 @api.get("/img/<string:data_type>/<string:mode>")
-@limiter.limit("100 per hour")
+@limiter.limit(env.get("RATE_LIMITING_GRAPH_GENERATION", "100 per hour"))
 def get_image(data_type: str, mode: str):
     if mode == "current":
         abort(404)

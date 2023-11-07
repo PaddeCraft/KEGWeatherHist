@@ -7,3 +7,5 @@ pydantic==2.1.1
 
 cryptography
 python-dotenv
+
+py-typed-env
