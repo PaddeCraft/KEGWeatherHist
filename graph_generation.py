@@ -45,10 +45,15 @@ def _text(text: str, /, font: ImageFont.FreeTypeFont = font, color: tuple = BLAC
     return txt.crop(txt.getbbox())
 
 
-def generate_entry_pos(data, i, graph_offset_x, graph_offset_y, distance_x, distance_y):
+def generate_entry_pos(data, i, graph_offset_x, graph_offset_y, distance_x, distance_y,graph_height,data_difference):
     entry = data[i]
+    data_difference = data_difference+1
     x = graph_offset_x + distance_x * i + (0.5 * distance_x)
-    y = graph_offset_y + distance_y * (entry - min(data)) + (0.5 * distance_y)
+    percent = (entry- (min(data) - 0.5)) /data_difference
+    print(percent)
+    
+    percent = 1- percent
+    y =   graph_offset_y + distance_y * percent * data_difference   #graph_offset_y + distance_y * (0.5 * (graph_height - graph_offset_y)) + (0.5 * distance_y)
 
     return (x, y)
 
@@ -69,7 +74,7 @@ def generate_graph(
     footer = _text(footer, color=LIGHT_GRAY)
     footer_height = footer.height + PADDING
 
-    data = list(reversed(data))
+   # data = list(reversed(data))
 
     if len(data) > 0:
         label_imgs = [_rotated_text(label, rotation=90) for label in labels]
@@ -78,7 +83,7 @@ def generate_graph(
         data_difference = max(data) - min(data)
         data_y_labels = list(
             reversed(
-                [_text(str(min(data) + i)) for i in range(round(data_difference) + 1)]
+                [_text(str(round((min(data) + i),1))) for i in range(round(data_difference) + 1)]
             )
         )
 
@@ -142,13 +147,13 @@ def generate_graph(
         # ------------------------------ Data projection ----------------------------- #
         for i in range(len(data)):
             x, y = generate_entry_pos(
-                data, i, graph_offset_x, graph_offset_y, distance_x, distance_y
+                data, i, graph_offset_x, graph_offset_y, distance_x, distance_y,graph_height,data_difference
             )
 
             if i < len(data) - 1:
                 # Connect this and the next point with a line
                 x2, y2 = generate_entry_pos(
-                    data, i + 1, graph_offset_x, graph_offset_y, distance_x, distance_y
+                    data, i + 1, graph_offset_x, graph_offset_y, distance_x, distance_y, graph_height,data_difference
                 )
                 draw.line((x, y, x2, y2), GRAY, STROKE_SIZE_CONNECTION)
 
