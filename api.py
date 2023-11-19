@@ -30,6 +30,7 @@ env_vars = [
     v("RATE_LIMITING_SINGLE_PROPERTY", str, OPTIONAL),
     v("RATE_LIMITING_GRAPH_GENERATION", str, OPTIONAL),
     v("RATE_LIMITING_DATA_DUMP", str, OPTIONAL),
+    v("TIMEZONE", str, OPTIONAL),
 ]
 
 env = load_env(env_vars)

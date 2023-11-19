@@ -4,6 +4,7 @@ flask-limiter
 pillow
 requests
 pydantic==2.1.1
+pytz
 
 cryptography
 python-dotenv

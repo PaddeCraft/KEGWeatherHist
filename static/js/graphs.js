@@ -17,12 +17,16 @@ if (locStorageEnableData) {
     );
 }
 
+var updatingData = false;
+
 document.addEventListener("DOMContentLoaded", function () {
     updateData();
     setInterval(updateData, 60 * 1000);
     setInterval(updateVisibilities, 500);
     console.info("Initialized interval loops");
 });
+
+window.updateData = updateData;
 
 var chartData = [
     {
@@ -142,6 +146,8 @@ var chartData = [
 ];
 
 function updateVisibilities() {
+    if (updatingData) return;
+
     var changed = false;
 
     for (var _i = 0; _i < chartData.length; _i++) {
@@ -190,6 +196,7 @@ function updateVisibilities() {
 }
 
 async function updateData() {
+    updatingData = true;
     updateVisibilities();
     console.info("Updating data");
     console.time("update_data");
@@ -225,15 +232,6 @@ async function updateData() {
             });
         }
 
-        // var now = new Date();
-        // for (var index = datasets[0].data.length; index > 0; index--) {
-        //     labels.push(
-        //         new Date(
-        //             now.getTime() - chart.hoursBetween * 3600000 * index
-        //         ).toLocaleDateString("de-DE", chart.dateLabel)
-        //     );
-        // }
-
         /* -------------------------------------------------------------------------- */
         /*                                Create Charts                               */
         /* -------------------------------------------------------------------------- */
@@ -265,6 +263,10 @@ async function updateData() {
         /*                         Restore selected categories                        */
         /* -------------------------------------------------------------------------- */
         if (chartCategoriesEnabled != null) {
+            console.info(
+                "Restoring selected categories",
+                chartCategoriesEnabled
+            );
             for (var index = 0; index < chart.callables.length; index++) {
                 var enabled = chartCategoriesEnabled[index];
                 chart.lastChartObj.setDatasetVisibility(index, enabled);
@@ -305,4 +307,6 @@ async function updateData() {
 
     console.timeEnd("update_data");
     console.info("Finished updating data");
+
+    updatingData = false;
 }
