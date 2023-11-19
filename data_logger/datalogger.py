@@ -79,35 +79,37 @@ def queue_data():
         return
 
     timestamp = int(time.time())
-    datx = {}
+    request_data = {}
+
+    request_data = {
+        "temperature": None,
+        "humidity": None,
+        "pressure": None,
+        "rain": None,
+        "wind": None,
+    }
 
     if outside["@temp"] != None:
-        datx["temperature"] = float(outside["@temp"])
+        request_data["temperature"] = float(outside["@temp"])
     if outside["@hum"] != None:
-        datx["humidity"] = float(outside["@hum"])
+        request_data["humidity"] = float(outside["@hum"])
     if inside["@press"] != None:
-        datx["pressure"] = int(float(inside["@press"]))
+        request_data["pressure"] = int(float(inside["@press"]))
     if rain["@rate"] != None:
-        datx["rain"] = float(rain["@rate"])
+        request_data["rain"] = float(rain["@rate"])
 
     if wind["@wind"] != None and wind["@dir"] != None:
-        datx["wind"] = {"speed": float(wind["@wind"]), "direction": int(float(wind["@dir"]))}
-    
-    #datx = {
-    #    "temperature": outside["@temp"],
-    #    "humidity": outside["@hum"],
-    #    "pressure": inside["@press"],
-    #    # TODO: Fix rain
-    #    "rain": rain["@rate"],
-    #    "wind": {"speed": wind["@wind"], "direction": wind["@dir"]},
-    #}
-    
+        request_data["wind"] = {
+            "speed": float(wind["@wind"]),
+            "direction": int(float(wind["@dir"])),
+        }
+
     m = hashlib.sha256()
-    m.update(jsON.dumps(datx, separators=(",", ":")).encode("UTF-8"))
+    m.update(jsON.dumps(request_data, separators=(",", ":")).encode("UTF-8"))
 
     data = {
         "meta": {"timestamp": timestamp},
-        "data": datx,
+        "data": request_data,
         "verify": {
             "hash": Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
             .encrypt(m.digest())
