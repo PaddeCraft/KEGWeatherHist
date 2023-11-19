@@ -140,7 +140,7 @@ class WeatherHistory:
         Returns:
             dict[list]: A dict with entries and a label for each entry
         """
-        res = {"labels": [], "entries": []}
+        res = {"labels": [], "entries": [], "timestamps": []}
 
         next_ts = start_ts
         avg_tmp = []
@@ -162,15 +162,14 @@ class WeatherHistory:
 
             # Add the entry if it's in the current interval or if it's the last
             if entry["ts"] > next_ts or i + 1 == len(self.history):
-                print(entry["ts"], next_ts, i + 1 == len(self.history))
-
                 tz = pytz.timezone(os.environ.get("TIMEZONE", "Europe/Berlin"))
 
                 # Calculate the average and the labels if the interval has passed or we are at the last entry
                 try:
-                    date = datetime.datetime.fromtimestamp(average(date_tmp), tz=tz)
+                    timestamp = int(average(date_tmp))
+                    date = datetime.datetime.fromtimestamp(timestamp, tz=tz)
                 except Exception:
-                    print(date_tmp)
+                    timestamp = 0
                     date = datetime.datetime.fromtimestamp(0, tz=tz)
 
                 try:
@@ -184,7 +183,7 @@ class WeatherHistory:
                     else date.strftime("%a, %d.%m.%y"),
                 )
 
-                # print(next_ts, date_tmp, avg_tmp)
+                res["timestamps"].append(timestamp)
 
                 while entry["ts"] > next_ts:
                     next_ts += interval.value * 60
