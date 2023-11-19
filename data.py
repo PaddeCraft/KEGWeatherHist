@@ -7,7 +7,8 @@ from enum import Enum
 from pydantic import BaseModel, ValidationError
 
 import hashlib
-import json as jsON
+
+import pytz
 
 from os import environ
 from dotenv import load_dotenv
@@ -163,12 +164,14 @@ class WeatherHistory:
             if entry["ts"] > next_ts or i + 1 == len(self.history):
                 print(entry["ts"], next_ts, i + 1 == len(self.history))
 
+                tz = pytz.timezone(os.environ.get("TIMEZONE", "Europe/Berlin"))
+
                 # Calculate the average and the labels if the interval has passed or we are at the last entry
                 try:
-                    date = datetime.datetime.fromtimestamp(average(date_tmp))
+                    date = datetime.datetime.fromtimestamp(average(date_tmp), tz=tz)
                 except Exception:
                     print(date_tmp)
-                    date = datetime.datetime.fromtimestamp(0)
+                    date = datetime.datetime.fromtimestamp(0, tz=tz)
 
                 try:
                     res["entries"].append(average(avg_tmp))
