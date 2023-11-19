@@ -62,9 +62,7 @@ def generate_entry_pos(
     print(percent)
 
     percent = 1 - percent
-    y = (
-        graph_offset_y + distance_y * percent * data_difference
-    )  # graph_offset_y + distance_y * (0.5 * (graph_height - graph_offset_y)) + (0.5 * distance_y)
+    y = graph_offset_y + distance_y * percent * data_difference
 
     return (x, y)
 
@@ -84,8 +82,6 @@ def generate_graph(
 
     footer = _text(footer, color=LIGHT_GRAY)
     footer_height = footer.height + PADDING
-
-    # data = list(reversed(data))
 
     if len(data) > 0:
         label_imgs = [_rotated_text(label, rotation=90) for label in labels]
