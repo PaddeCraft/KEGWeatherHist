@@ -4,15 +4,9 @@ import pickle
 import datetime
 
 from enum import Enum
-from pydantic import BaseModel, ValidationError
-
-import hashlib
 
 import pytz
-
-from os import environ
-from dotenv import load_dotenv
-from cryptography.fernet import Fernet
+from pydantic import BaseModel, ValidationError
 
 try:
     from statistics import fmean as average
@@ -22,12 +16,16 @@ except ImportError:
     )
     from statistics import mean as average
 
-from config import *
+from .env import env
+
+HISTORY_FILE = env.get("HISTORY_FILE", "weather_history.pickle")
 
 
 # ---------------------------------------------------------------------------- #
 #                          Data structure definitions                          #
 # ---------------------------------------------------------------------------- #
+
+
 class WeatherWindData(BaseModel):
     speed: float | int = 0
     direction: int = 0
@@ -200,57 +198,5 @@ class WeatherHistory:
 
         return res
 
-    def validate_and_save(self, data: dict) -> bool:
-        """Validates the data and saves it if valid
 
-        Args:
-            data (dict): The data
-
-        Returns:
-            bool: Returns True if data is valid, False if invalid
-        """
-
-        # Check if data is valid
-        try:
-            loaded = PostData(**data)
-        except ValidationError:
-            return False
-        try:
-            m = hashlib.sha256()
-            m.update(loaded.data.model_dump_json().encode("UTF-8"))
-
-            notOriginalHash = m.digest()
-            originalHash = Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).decrypt(
-                loaded.verify.hash
-            )
-
-            timestampVal = (
-                Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
-                .decrypt(str(loaded.verify.enc).encode("UTF-8"))
-                .decode("UTF-8")
-            )
-            if originalHash != notOriginalHash or str(timestampVal) != str(
-                loaded.meta.timestamp
-            ):
-                print(
-                    f"Validation failed: is Hash not equal: {originalHash != notOriginalHash} \n Server Hash ${notOriginalHash} ,\n Request Hash ${originalHash} ,\n Server Timestamp: ${timestampVal},\n Request Timestamp: ${loaded.meta.timestamp} "
-                )
-                print(
-                    loaded.data.model_dump_json(),
-                )
-                return False
-        except Exception as e:
-            print("Error:", e)
-            return False
-        for i in self.history:
-            if i["ts"] == loaded.meta.timestamp:
-                return False
-
-        # Save data to history
-        self.load(loaded.data, loaded.meta.timestamp)
-
-        return True
-
-
-load_dotenv()
 history = WeatherHistory()

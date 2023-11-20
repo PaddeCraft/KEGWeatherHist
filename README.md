@@ -17,7 +17,7 @@ Copy the `.env.example` file to `.env` and populate it with your configuration.
 
 ## Run
 
-Run the python script at `src/start.py` to start the uploader.
+Run the python script at `start.py` to start the uploader.
 Run the script `display_meteohub/meteohub-display/update_data.py` from the `display_meteohub/meteohub-display` directory
 
 ## Credits

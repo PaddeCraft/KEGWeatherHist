@@ -5,12 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>
-            {% block title %}{% endblock %} | Wetterstation KEG Amorbach
+            API-Dokumentation | Wetterstation KEG Amorbach
         </title>
         <link rel="icon" href="./static/logo.svg" type="image/x-icon" />
         <!-- -------------------------------- Style -------------------------------- -->
         <link rel="stylesheet" href="./static/css/main.css" type="text/css" />
-        {% block head %}{% endblock %}
+        
     </head>
     <body class="p-5">
         <div class="navbar bg-slate-300 dark:bg-slate-700 rounded-full">
@@ -32,7 +32,61 @@
             </div>
         </div>
         <div class="pb-6"></div>
-        {% block content %}{% endblock %}
+        
+<div class="prose">
+    <table>
+        <tr>
+            <th>Link</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><a class="link" href="/download">/download</a></td>
+            <td>Index List!</td>
+        </tr>
+        <tr>
+            <td>
+                <a class="link" href="/download/image/temperature/month">
+                    /download/&lt;string:file_type&gt;/&lt;string:data_type&gt;/&lt;string:mode&gt;
+                </a>
+            </td>
+            <td>To download data!</td>
+        </tr>
+        <tr>
+            <td><h2>everything below has the prefix</h2></td>
+            <td><h2>/api</h2></td>
+        </tr>
+        <tr>
+            <td><a class="link" href="/docs">/docs</a></td>
+            <td>This Site!</td>
+        </tr>
+        <tr>
+            <td>
+                <a class="link" href="/api/temperature/month">
+                    /&lt;string:data_type&gt;/&lt;string:mode&gt;
+                </a>
+            </td>
+            <td>Gives you the data in JSON format</td>
+        </tr>
+        <tr>
+            <td>
+                <a class="link" href="/api/img/temperature/month">
+                    /img/&lt;string:data_type&gt;/&lt;string:mode&gt;
+                </a>
+            </td>
+            <td>Gives you a picture of the graphs</td>
+        </tr>
+        <tr>
+            <td><a class="link" href="/api/post"> /post</a></td>
+            <td>Upload of the weather data!</td>
+        </tr>
+        <tr>
+            <td><a class="link" href="/api/all"> /all </a></td>
+            <td>All the current Weather data in one place!</td>
+        </tr>
+    </table>
+    <sub>@NprogramDev</sub>
+</div>
+
         <div class="pb-12"></div>
         <footer
             class="footer footer-center p-8 bg-slate-300 dark:bg-slate-700 text-base-content rounded-lg"
@@ -99,7 +153,7 @@
             </div>
             <div>
                 <p>
-                    Copyright &copy; {{ year }} KEG Amorbach. Alle Rechte
+                    Copyright &copy;  KEG Amorbach. Alle Rechte
                     vorbehalten.
                 </p>
                 <p>
