@@ -34,11 +34,11 @@ class WeatherWindData(BaseModel):
 
 
 class WeatherData(BaseModel):
-    temperature: float | int = 0
-    humidity: float | int = 0
-    pressure: int = 0
-    rain: float | int = 0
-    wind: WeatherWindData = WeatherWindData()
+    temperature: float | int | None = None
+    humidity: float | int | None = None
+    pressure: int | None = None
+    rain: float | int | None = None
+    wind: WeatherWindData | None = None
 
 
 class PostMetaData(BaseModel):
@@ -91,8 +91,16 @@ class WeatherHistory:
             # Load newest data
             for item in self.history:
                 if item["ts"] > self.current_data_time:
-                    self.current_data_time = item["ts"]
-                    self.current_data = WeatherData(**item["data"])
+                    self.set_current_data(WeatherData(**item["data"]), item["ts"])
+
+    def set_current_data(self, data: WeatherData, timestamp: int):
+        curr = self.current_data.model_dump()
+        for key, value in data.model_dump().items():
+            if value != None:
+                curr[key] = value
+
+        self.current_data = WeatherData(**curr)
+        self.current_data_time = timestamp
 
     def load(self, data: WeatherData, timestamp: int):
         """Load data into history
@@ -122,8 +130,7 @@ class WeatherHistory:
 
         # If newest data, set as current data
         if timestamp > self.current_data_time:
-            self.current_data_time = timestamp
-            self.current_data = data
+            self.set_current_data(data, timestamp)
 
         # Save to disk
         with open(HISTORY_FILE, "wb") as hist:
@@ -157,8 +164,9 @@ class WeatherHistory:
                     next_ts += interval.value * 60
                 next_ts -= interval.value * 60
 
-            avg_tmp.append(entry["data"][key])
-            date_tmp.append(entry["ts"])
+            if entry["data"][key] != None:
+                avg_tmp.append(entry["data"][key])
+                date_tmp.append(entry["ts"])
 
             # Add the entry if it's in the current interval or if it's the last
             if entry["ts"] > next_ts or i + 1 == len(self.history):
@@ -211,8 +219,8 @@ class WeatherHistory:
             m = hashlib.sha256()
             m.update(loaded.data.model_dump_json().encode("UTF-8"))
 
-            notOrginalHash = m.digest()
-            orignalHash = Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).decrypt(
+            notOriginalHash = m.digest()
+            originalHash = Fernet(environ["VERIFICATION_KEY"].encode("UTF-8")).decrypt(
                 loaded.verify.hash
             )
 
@@ -221,11 +229,14 @@ class WeatherHistory:
                 .decrypt(str(loaded.verify.enc).encode("UTF-8"))
                 .decode("UTF-8")
             )
-            if orignalHash != notOrginalHash or str(timestampVal) != str(
+            if originalHash != notOriginalHash or str(timestampVal) != str(
                 loaded.meta.timestamp
             ):
                 print(
-                    f"Validation failed: is Hash not equal: {orignalHash != notOrginalHash} \n Server Hash ${notOrginalHash} ,\n Request Hash ${orignalHash} ,\n Server Timestamp: ${timestampVal},\n Request Timestamp: ${loaded.meta.timestamp} "
+                    f"Validation failed: is Hash not equal: {originalHash != notOriginalHash} \n Server Hash ${notOriginalHash} ,\n Request Hash ${originalHash} ,\n Server Timestamp: ${timestampVal},\n Request Timestamp: ${loaded.meta.timestamp} "
+                )
+                print(
+                    loaded.data.model_dump_json(),
                 )
                 return False
         except Exception as e:

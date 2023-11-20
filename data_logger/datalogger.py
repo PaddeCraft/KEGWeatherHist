@@ -79,20 +79,37 @@ def queue_data():
         return
 
     timestamp = int(time.time())
-    datx = {
-        "temperature": outside["@temp"],
-        "humidity": outside["@hum"],
-        "pressure": inside["@press"],
-        # TODO: Fix rain
-        "rain": rain["@rate"],
-        "wind": {"speed": wind["@wind"], "direction": wind["@dir"]},
+    request_data = {}
+
+    request_data = {
+        "temperature": None,
+        "humidity": None,
+        "pressure": None,
+        "rain": None,
+        "wind": None,
     }
+
+    if outside["@temp"] != None:
+        request_data["temperature"] = float(outside["@temp"])
+    if outside["@hum"] != None:
+        request_data["humidity"] = float(outside["@hum"])
+    if inside["@press"] != None:
+        request_data["pressure"] = int(float(inside["@press"]))
+    if rain["@rate"] != None:
+        request_data["rain"] = float(rain["@rate"])
+
+    if wind["@wind"] != None and wind["@dir"] != None:
+        request_data["wind"] = {
+            "speed": float(wind["@wind"]),
+            "direction": int(float(wind["@dir"])),
+        }
+
     m = hashlib.sha256()
-    m.update(jsON.dumps(datx, separators=(",", ":")).encode("UTF-8"))
+    m.update(jsON.dumps(request_data, separators=(",", ":")).encode("UTF-8"))
 
     data = {
         "meta": {"timestamp": timestamp},
-        "data": datx,
+        "data": request_data,
         "verify": {
             "hash": Fernet(environ["VERIFICATION_KEY"].encode("UTF-8"))
             .encrypt(m.digest())
