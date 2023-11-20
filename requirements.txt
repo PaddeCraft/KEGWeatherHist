@@ -5,5 +5,6 @@ requests
 pytz
 
 pydantic==2.1.1
+xmltodict
 
 py-typed-env
