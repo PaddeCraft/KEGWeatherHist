@@ -3,7 +3,14 @@ import os
 
 
 def ftp_connect(host, user, passwd):
-    ftp = ftplib.FTP(host)
+    ftp = ftplib.FTP()
+
+    port = 21
+    if ":" in host:
+        port = int(host.split(":")[1])
+        host = host.split(":")[0]
+
+    ftp.connect(host, port)
 
     try:
         ftp.login(user, passwd)
