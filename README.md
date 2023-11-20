@@ -17,7 +17,8 @@ Copy the `.env.example` file to `.env` and populate it with your configuration.
 
 ## Run
 
-Run the script `run.sh` for developement mode, and `run_prodd.sh` for production mode.
+Run the python script at `src/start.py` to start the uploader.
+Run the script `display_meteohub/meteohub-display/update_data.py` from the `display_meteohub/meteohub-display` directory
 
 ## Credits
 

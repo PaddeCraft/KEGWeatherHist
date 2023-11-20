@@ -1,1 +1,0 @@
-gunicorn 'server:app' -b :8080
