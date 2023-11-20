@@ -9,6 +9,9 @@ import os
 import json
 import time
 import shutil
+import socket
+
+import pytz
 
 from datetime import datetime
 
@@ -40,6 +43,14 @@ def get_data(data_type: str, mode: str, allow_current: bool):
     return res
 
 
+def getIP():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    i = s.getsockname()[0]
+    s.close()
+    return i
+
+
 def build_files(path: str):
     # Render templates
     template_dir = os.path.join(APP_ROOT_PATH, "templates")
@@ -52,6 +63,9 @@ def build_files(path: str):
             template_vars["timestamp"] = int(time.time())
         elif f == "download.html":
             template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
+        elif f == "meteoware.html":
+            template_vars["ip"] = getIP()
+            template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
 
         jinja_env.get_template(f, globals=template_vars).stream().dump(
             os.path.join(path, f)
@@ -107,3 +121,37 @@ def build_files(path: str):
     file_path = os.path.join(path, "api", "all.json")
     with open(file_path, "w", encoding="UTF-8") as f:
         json.dump(history.current_data.model_dump(), f, indent=4)
+
+    file_path = os.path.join(path, "api", "meteoware-live.json")
+    with open(file_path, "w", encoding="UTF-8") as f:
+        tz = pytz.timezone(os.environ.get("TIMEZONE", "Europe/Berlin"))
+        _date = datetime.fromtimestamp(history.curr)
+        _date = tz.normalize(tz.localize(_date, is_dst=True))
+
+        # UTC timestamp
+        date = _date.strftime("%Y%m%d%H%M%S")
+
+        json.dump(
+            {
+                "header": {"generator": "meteohub", "version": "1.0"},
+                "current": {
+                    "dt": {"local": date, "utc": date},
+                    "temperature": {"v": history.current_data.temperature},
+                    # "dewpoint": {"v": history.current_data.dewpoint},
+                    "dewpoint": {"v": 0},
+                    "pressure": {"v": history.current_data.pressure},
+                    "humidity": {"v": history.current_data.humidity},
+                    "precipitation": [
+                        {"v": history.current_data.rain, "p": "rate"},
+                    ],
+                    "wind": {
+                        "speed": {"v": history.current_data.wind.speed},
+                        # "gust": {"v": wind["@gust"]},
+                        "gust": {"v": 0},
+                        "direction": {"v": history.current_data.wind.direction},
+                    },
+                },
+            },
+            f,
+            indent=4,
+        )

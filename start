@@ -1,13 +1,18 @@
 #!/bin/bash
 killall python
 killall chromium-browser
-cd /home/meteohub/meteohub-display/
+cd /home/meteohub/KEGWeatherHist
 pip install -r requirements.txt
-python update_data.py &
+
+pip install pyautogui
+python -c "import pyautogui; pyautogui.moveTo(0,0);"
+
+python start.py &
 sleep 2
 echo -------------------------------------------------------------------------
-echo Startet in 5 s
+echo Startet in 60 s
 echo -------------------------------------------------------------------------
-sleep 5
+sleep 60
+# TODO: Change url
 chromium-browser --chrome --kiosk http://localhost:8080/ --no-sandbox --force-device-scale-factor=1.5
 
