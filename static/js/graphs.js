@@ -312,7 +312,7 @@ async function updateData() {
 }
 
 const e = document.getElementById("info_last_updated");
-const CRITICAL_LAST_UPDATE_THRESHOLD = 60 * 60 * 1000; // 1 hour
+const CRITICAL_LAST_UPDATE_THRESHOLD = 60 * 60; // 1 hour
 if (
     (window.data_update_time + CRITICAL_LAST_UPDATE_THRESHOLD) * 1000 <
     Date.now()

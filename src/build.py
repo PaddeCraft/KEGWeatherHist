@@ -125,7 +125,7 @@ def build_files(path: str):
     file_path = os.path.join(path, "api", "meteoware-live.json")
     with open(file_path, "w", encoding="UTF-8") as f:
         tz = pytz.timezone(os.environ.get("TIMEZONE", "Europe/Berlin"))
-        _date = datetime.fromtimestamp(history.curr)
+        _date = datetime.fromtimestamp(history.current_data_time)
         _date = tz.normalize(tz.localize(_date, is_dst=True))
 
         # UTC timestamp

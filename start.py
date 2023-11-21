@@ -16,12 +16,15 @@ def loop():
 
     ftp = ftp_connect(env.get("FTP_ADDR"), env.get("FTP_USER"), env.get("FTP_PASS"))
     ensure_directory(ftp, env.get("FTP_DIR"))
-    
+
     with TemporaryDirectory() as tmp_dir:
         build_files(tmp_dir)
         upload_directory(ftp, tmp_dir, env.get("FTP_DIR"))
-    
+
     ftp.close()
+
+    print("Uploaded data.")
+
 
 next_post = time.time()
 
