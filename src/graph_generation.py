@@ -59,7 +59,6 @@ def generate_entry_pos(
     data_difference = data_difference + 1
     x = graph_offset_x + distance_x * i + (0.5 * distance_x)
     percent = (entry - (min(data) - 0.5)) / data_difference
-    print(percent)
 
     percent = 1 - percent
     y = graph_offset_y + distance_y * percent * data_difference

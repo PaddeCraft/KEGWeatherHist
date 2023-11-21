@@ -1,4 +1,0 @@
-requests
-xmltodict
-cryptography
-python-dotenv

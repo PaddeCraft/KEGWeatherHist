@@ -7,9 +7,9 @@
         <title>
             {% block title %}{% endblock %} | Wetterstation KEG Amorbach
         </title>
-        <link rel="icon" href="/static/logo.jpg" type="image/x-icon" />
+        <link rel="icon" href="./static/logo.svg" type="image/x-icon" />
         <!-- -------------------------------- Style -------------------------------- -->
-        <link rel="stylesheet" href="/static/css/main.css" type="text/css" />
+        <link rel="stylesheet" href="./static/css/main.css" type="text/css" />
         {% block head %}{% endblock %}
     </head>
     <body class="p-5">
@@ -17,15 +17,15 @@
             <div class="flex-1">
                 <a
                     class="btn btn-ghost rounded-full normal-case text-xl"
-                    href="/"
-                    >KEG Amorbach &gt; Wetterdaten
+                    href="./"
+                    >KEG Amorbach &gt; Wetter
                 </a>
             </div>
             <div class="avatar pr-1">
                 <div class="w-10 rounded-full">
                     <img
                         class="bg-slate-400 dark:bg-slate-600 p-1"
-                        src="/static/logo.svg"
+                        src="./static/logo.svg"
                         class="avatar"
                     />
                 </div>
@@ -38,10 +38,10 @@
             class="footer footer-center p-8 bg-slate-300 dark:bg-slate-700 text-base-content rounded-lg"
         >
             <div>
-                <a href="/download" class="link link-hover"
+                <a href="./download.html" class="link link-hover"
                     >Wetterdaten herunterladen
                 </a>
-                <a href="/api/docs" class="link link-hover"
+                <a href="./api_docs.html" class="link link-hover"
                     >API-Dokumentation
                 </a>
                 <a
@@ -111,6 +111,15 @@
                     <a href="https://github.com/PaddeCraft" class="link"
                         >Patrick Ulbricht</a
                     >
+                </p>
+                <p>
+                    Quellcode auf
+                    <a
+                        href="https://github.com/PaddeCraft/KEGWeatherHist"
+                        class="link"
+                        >GitHub</a
+                    >
+                    erhältlich
                 </p>
             </div>
         </footer>

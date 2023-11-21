@@ -27,7 +27,7 @@ Array.prototype.forEach.call(tabElements, function (e) {
 });
 
 function selectTab(nr, tabs) {
-    history.replaceState(null, "", "/#" + nr);
+    history.replaceState(null, "", "./#" + nr);
     setTabSelectHighlight(parseInt(nr));
 
     for (var [, value] of Object.entries(tabs)) {

@@ -310,3 +310,13 @@ async function updateData() {
 
     updatingData = false;
 }
+
+const e = document.getElementById("info_last_updated");
+const CRITICAL_LAST_UPDATE_THRESHOLD = 60 * 60; // 1 hour
+if (
+    (window.data_update_time + CRITICAL_LAST_UPDATE_THRESHOLD) * 1000 <
+    Date.now()
+) {
+    const date = new Date(window.data_update_time * 1000);
+    e.innerText = `Die Daten wurden zuletzt am ${date.toLocaleDateString()} um ${date.toLocaleTimeString()} aktualisiert. Hier angezeigte Daten können veraltet sein.`;
+}
