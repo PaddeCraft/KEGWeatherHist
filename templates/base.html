@@ -11,8 +11,9 @@
         <!-- -------------------------------- Style -------------------------------- -->
         <link rel="stylesheet" href="./static/css/main.css" type="text/css" />
         {% block head %}{% endblock %}
-    </head>
-    <body class="p-5">
+    </style>
+    <body class="p-5 {% if embed %} bg-white dark:bg-white text-blue-950 dark:text-blue-950 {% endif %}">
+        {% if not embed %}
         <div class="navbar bg-slate-300 dark:bg-slate-700 rounded-full">
             <div class="flex-1">
                 <a
@@ -32,15 +33,16 @@
             </div>
         </div>
         <div class="pb-6"></div>
-        {% block content %}{% endblock %}
+        {% endif %} {% block content %}{% endblock %}
         <div class="pb-12"></div>
         <footer
-            class="footer footer-center p-8 bg-slate-300 dark:bg-slate-700 text-base-content rounded-lg"
+            class="footer footer-center p-8 bg-slate-300 text-base-content rounded-lg {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}"
         >
             <div>
                 <a href="./download.html" class="link link-hover"
                     >Wetterdaten herunterladen
                 </a>
+                {% if not embed %}
                 <a href="./api_docs.html" class="link link-hover"
                     >API-Dokumentation
                 </a>
@@ -57,8 +59,9 @@
                 <a
                     href="https://www.amorgym.de/datenschutzerklaerung/"
                     class="link link-hover"
-                    >Datenschutzerkl&auml;rung </a
-                ><br />
+                    >Datenschutzerkl&auml;rung
+                </a>
+                <br />
                 <div class="grid grid-flow-col gap-4">
                     <a href="https://www.instagram.com/kegamorbach/">
                         <!-- https://scontent-muc2-1.xx.fbcdn.net/v/t39.8562-6/274515697_681782982854519_7664659647335778659_n.svg?_nc_cat=101&ccb=1-7&_nc_sid=f537c7&_nc_ohc=5o7jQEAPNdcAX88nP2s&_nc_ht=scontent-muc2-1.xx&oh=00_AfBodttPG7Z0BNEjDJjI4N6KebzfjWmc2skBrktAYp5l1g&oe=655E7AE5 -->
@@ -96,12 +99,12 @@
                         </svg>
                     </a>
                 </div>
+                {% endif %}
             </div>
             <div>
-                <p>
-                    Copyright &copy; {{ year }} KEG Amorbach. Alle Rechte
-                    vorbehalten.
-                </p>
+                {% if not embed %}
+                <p>Copyright &copy; KEG Amorbach. Alle Rechte vorbehalten.</p>
+                {% endif %}
                 <p>
                     Programmiert von
                     <a href="https://github.com/NprogramDev" class="link"

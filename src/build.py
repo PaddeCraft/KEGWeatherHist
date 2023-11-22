@@ -71,6 +71,12 @@ def build_files(path: str):
             os.path.join(path, f)
         )
 
+        if f == "index.html":
+            template_vars["embed"] = True
+            jinja_env.get_template(f, globals=template_vars).stream().dump(
+                os.path.join(path, "embed.html")
+            )
+
     # Copy static files
     static_dir = os.path.join(APP_ROOT_PATH, "static")
     shutil.copytree(static_dir, os.path.join(path, "static"))
