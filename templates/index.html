@@ -42,25 +42,25 @@
             <h2>Live&uuml;bersicht</h2>
             <div></div>
             <div class="pt-8 items-center">
-                <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
                     <span class="text-xl"
                         >Temperatur: <strong><span id="live_temp">--</span> &deg;C</span
                         ></strong>
                 </div>
                 <br />
-                <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
                     <span class="text-xl"
                         >Regenrate: <strong><span id="live_rain">--</span> mm/m<sup>2</sup></span
                         ></strong>
                 </div>
                 <br />
-                <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
                     <span class="text-xl"
                         >Luftdruck: <strong><span id="live_pressure">--</span> hpa</span
                         ></strong>
                 </div>
                 <br />
-                <div class="bg-slate-300 dark:bg-slate-700 rounded-lg p-3">
+                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
                     <span class="text-xl"
                         >Windgeschwindigkeit: <strong><span id="live_windspeed">--</span> km/h</span
                         ></strong>
