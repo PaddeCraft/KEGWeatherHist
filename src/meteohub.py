@@ -6,6 +6,7 @@ import xmltodict
 
 import time
 
+
 def get_data():
     r = requests.get(
         f"{env.get('METEOHUB_URL')}/meteolog.cgi?type=xml&quotes=1&mode=data&info=station&info=utcdate&info=sensorids"
