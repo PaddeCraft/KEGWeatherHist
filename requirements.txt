@@ -1,7 +1,8 @@
 jinja2
-
 pillow
+
 requests
+pysftp
 pytz
 
 pydantic==2.1.1

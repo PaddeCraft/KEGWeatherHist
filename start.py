@@ -14,12 +14,20 @@ def loop():
 
     history.load(WeatherData(**data), timestamp)
 
-    ftp = ftp_connect(env.get("FTP_ADDR"), env.get("FTP_USER"), env.get("FTP_PASS"))
-    ensure_directory(ftp, env.get("FTP_DIR"))
+    use_sftp = env.get("USE_SFTP")
+    ftp = FTPLib.get_connector(
+        env.get("FTP_ADDR"),
+        env.get("FTP_USER"),
+        env.get("FTP_PASS"),
+        use_sftp,
+        env.get("SFTP_KEY", None),
+    )
+
+    ftp.ensure_directory(env.get("FTP_DIR"))
 
     with TemporaryDirectory() as tmp_dir:
         build_files(tmp_dir)
-        upload_directory(ftp, tmp_dir, env.get("FTP_DIR"))
+        ftp.upload_directory(tmp_dir, env.get("FTP_DIR"))
 
     ftp.close()
 
