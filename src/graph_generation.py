@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from io import BytesIO
 
 MIN_GRAPH_WIDTH = 720
@@ -66,6 +66,18 @@ def generate_entry_pos(
     return (x, y)
 
 
+def load_img(path: str, size: tuple = None):
+    img = Image.open(
+        path,
+        "r",
+    )
+    if size != None:
+        # Scale image to fit in square
+        return img.resize(size, Image.Resampling.LANCZOS)
+
+    return img
+
+
 def generate_graph(
     labels: list[str],
     data: list[int],
@@ -109,7 +121,27 @@ def generate_graph(
     graph_height = height - header_height - label_height - footer_height
     graph_width = width - PADDING - graph_offset_x
 
+    logo_size = graph_height - 2 * PADDING
+    logo = load_img(
+        "assets/logo.png",
+        (logo_size, logo_size),
+    )
+    # Preserve transparency, but half the alpha value
+    alpha = logo.split()[3]
+    alpha = ImageEnhance.Brightness(alpha).enhance(0.3)
+    logo.putalpha(alpha)
+
     draw = ImageDraw.Draw(image)
+
+    # ----------------------------------- Logo ----------------------------------- #
+    image.paste(
+        logo,
+        (
+            graph_offset_x + int(graph_width / 2 - logo_size / 2),
+            graph_offset_y + PADDING,
+        ),
+        logo,
+    )
 
     if len(data) > 0:
         # ----------------------------- If data available ---------------------------- #
@@ -203,7 +235,14 @@ def generate_graph(
         image.paste(no_data_text, (x, y), no_data_text)
 
     # ---------------------------------- Header ---------------------------------- #
-    image.paste(header, (int(width / 2 - header.width / 2), PADDING), header)
+    image.paste(
+        header,
+        (
+            int(width / 2 - header.width / 2),
+            PADDING,
+        ),
+        header,
+    )
 
     # ---------------------------------- Footer ---------------------------------- #
     image.paste(footer, (PADDING, height - footer_height), footer)
