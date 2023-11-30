@@ -2,17 +2,17 @@
 killall python
 killall chromium-browser
 cd /home/meteohub/KEGWeatherHist
-pip install -r requirements.txt
+
+source .venv/bin/activate
 
 pip install pyautogui
 python -c "import pyautogui; pyautogui.moveTo(0,0);"
 
 python start.py &
-sleep 2
 echo -------------------------------------------------------------------------
 echo Startet in 60 s
 echo -------------------------------------------------------------------------
 sleep 60
-# TODO: Change url
-chromium-browser --chrome --kiosk http://localhost:8080/ --no-sandbox --force-device-scale-factor=1.5
+
+chromium-browser --chrome --kiosk http://amorkeg.de/wetter/meteoware.html --no-sandbox --force-device-scale-factor=1.5
 

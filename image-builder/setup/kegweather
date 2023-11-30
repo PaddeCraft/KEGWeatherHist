@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Set user and password to meteohub
+usermod -l meteohub alarm
+chpasswd <<<"meteohub:meteohub"
+
+# Install dependencies
+pacman -S i3-wm python chromium --noconfirm --needed
+# Cryprography
+pacman -S base-devel openssl libffi  --noconfirm --needed
+# Pillow
+pacman -S libjpeg-turbo libjpeg6-turbo zlib libtiff lcms2 libwebp tk libimagequant libraqm libxcb --noconfirm --needed
+
+# Setup python
+python -m venv .venv
+source .venv/bin/activate
+
+python -m ensurepip
+python -m pip install --upgrade pip
+
+# Setup environment
+cd /home/alarm/KEGWeatherHist
+pip install -r requirements.txt
+
+# Enable service
+systemctl enable kegweather.service

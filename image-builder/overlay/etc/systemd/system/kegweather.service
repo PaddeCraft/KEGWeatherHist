@@ -1,0 +1,8 @@
+[Unit]
+Description=KEGWeatherHist
+
+[Service]
+ExecStart=/home/alarm/start
+
+[Install]
+WantedBy=multi-user.target

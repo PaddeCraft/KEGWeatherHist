@@ -1,0 +1,18 @@
+
+
+KKKK    KKK  EEEEEEEE     GGGGG
+KKKK   KKK   EEEEEEEE   GGGGGGGG
+KKKKKKKK     EEEE      GGG
+KKKKKK       EEEEEE    GG
+KKKKKKKK     EEEEEE    GG    GGGG
+KKKK  KKK    EEEE      GGG     GG
+KKKK   KKK   EEEEEEEE   GGGGGGGG    
+KKKK    KKK  EEEEEEEE     GGGGG
+
+
+SSH Server Wetter Station
+by Noah P. (@NprogramDev) and Patrick U. (@PaddeCraft)
+
+If you want to modify anything here, please also do it in the image build files and rebuild the image for future use.
+For more information, look at /home/alarm/KEGWeatherHist, where you can find a readme as well as the source code.
+
