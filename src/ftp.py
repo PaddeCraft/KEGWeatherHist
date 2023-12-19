@@ -33,7 +33,7 @@ class FTPLib:
             pass
 
     class FTPConnector(Connector):
-        def __init__(self, host, user, passwd, known_hosts) -> None:
+        def __init__(self, host, user, passwd) -> None:
             ftp = ftplib.FTP()
 
             port = 21
@@ -50,13 +50,13 @@ class FTPLib:
 
             self.ftp = ftp
 
-        def upload_directory(self, path, remote_path):
+        def upload_directory(self, local_path, remote_path):
             self.ensure_directory(remote_path)
 
-            for file in os.listdir(path):
-                path = os.path.join(path, file)
+            for file in os.listdir(local_path):
+                path = os.path.join(local_path, file)
                 if os.path.isdir(path):
-                    self.upload_directory(remote_path, os.path.join(remote_path, file))
+                    self.upload_directory(path, os.path.join(remote_path, file))
 
                 else:
                     if not self.upload_file(path, os.path.join(remote_path, file)):
