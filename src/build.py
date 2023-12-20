@@ -11,8 +11,6 @@ import time
 import shutil
 import socket
 
-import pytz
-
 from getmac import get_mac_address
 
 from datetime import datetime, UTC
