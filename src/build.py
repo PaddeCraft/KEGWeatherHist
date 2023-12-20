@@ -75,7 +75,6 @@ def build_files(path: str):
         elif f == "download.html":
             template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
         elif f == "meteoware.html":
-            template_vars["ip"] = getIP()
             template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
 
         jinja_env.get_template(f, globals=template_vars).stream().dump(
