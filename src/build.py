@@ -178,6 +178,8 @@ def build_status_file(directory: str, status: dict):
     git_status = {}
 
     try:
+        # Based on this answer: https://stackoverflow.com/a/3278427
+
         git_output_local = os.popen("git rev-parse @").read().strip()
         git_output_remote = os.popen("git rev-parse @{u}").read().strip()
         git_output_base = os.popen("git merge-base @ @{u}").read().strip()
