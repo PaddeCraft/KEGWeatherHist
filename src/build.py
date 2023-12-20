@@ -165,4 +165,8 @@ def build_files(path: str):
 
 def build_status_file(directory: str, status: dict):
     with open(os.path.join(directory, "status.json"), "w", encoding="UTF-8") as f:
-        json.dump({"status": status, "timestamp": int(time.time())}, f, indent=4)
+        json.dump(
+            {"status": status, "ip_addr": getIP(), "timestamp": int(time.time())},
+            f,
+            indent=4,
+        )
