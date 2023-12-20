@@ -13,7 +13,7 @@ import socket
 
 import pytz
 
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 def get_data(data_type: str, mode: str, allow_current: bool):
@@ -130,12 +130,10 @@ def build_files(path: str):
 
     file_path = os.path.join(path, "api", "meteoware-live.json")
     with open(file_path, "w", encoding="UTF-8") as f:
-        tz = pytz.timezone(os.environ.get("TIMEZONE", "Europe/Berlin"))
-        _date = datetime.fromtimestamp(history.current_data_time)
-        _date = tz.normalize(tz.localize(_date, is_dst=True))
-
         # UTC timestamp
-        date = _date.strftime("%Y%m%d%H%M%S")
+        date = datetime.fromtimestamp(history.current_data_time, tz=UTC).strftime(
+            "%Y%m%d%H%M%S"
+        )
 
         json.dump(
             {
