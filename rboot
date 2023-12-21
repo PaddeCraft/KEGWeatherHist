@@ -9,4 +9,4 @@ source .venv/bin/activate
 pip3 install -r requirements.txt
 
 date > lastReboot.txt
-/usr/bin/reboot
+reboot
