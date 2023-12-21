@@ -10,6 +10,7 @@ import json
 import time
 import shutil
 import socket
+import platform
 
 from getmac import get_mac_address
 
@@ -190,6 +191,14 @@ def build_status_file(directory: str, status: dict):
         if all(not git_status[key] for key in git_status):
             raise Exception("Diverged branch.")
 
+        git_current_commit = os.popen("git rev-parse HEAD").read().strip()
+        git_current_commit_message = os.popen("git log -1 --pretty=%B").read().strip()
+
+        git_status["commit"] = {
+            "hash": git_current_commit,
+            "message": git_current_commit_message,
+        }
+
         git_status["error"] = False
 
     except Exception as e:
@@ -213,6 +222,37 @@ def build_status_file(directory: str, status: dict):
     except Exception as e:
         pass
 
+    # ------------------------------- Machine info ------------------------------- #
+
+    machine_info = {}
+    try:
+        machine_info["arch"] = platform.machine()
+        machine_info["hostname"] = platform.node()
+        machine_info["identifier"] = platform.platform()
+        machine_info["platform"] = platform.system() + " " + platform.release()
+
+        machine_info["specs"] = {
+            "cores": os.cpu_count(),
+            "memory": os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES"),
+        }
+        machine_info["python"] = {
+            "version": platform.python_version(),
+            "implementation": platform.python_implementation(),
+        }
+    except Exception as e:
+        pass
+
+    hardware_info = {}
+    try:
+        with open("/proc/device-tree/model") as f:
+            board_name = f.read().strip()
+
+        hardware_info["board"] = board_name
+    except Exception as e:
+        pass
+
+    machine_info["hardware"] = hardware_info
+
     # ------------------------------ Write the file ------------------------------ #
 
     with open(os.path.join(directory, "status.json"), "w", encoding="UTF-8") as f:
@@ -224,6 +264,7 @@ def build_status_file(directory: str, status: dict):
                     "mac_addr": get_mac_address(),
                     "last_reboot": last_reboot,
                     "uptime": uptime,
+                    "platform": machine_info,
                 },
                 "git": git_status,
                 "timestamp": int(time.time()),
