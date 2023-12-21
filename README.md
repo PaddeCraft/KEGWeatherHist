@@ -22,9 +22,10 @@ Run the script `display_meteohub/meteohub-display/update_data.py` from the `disp
 
 ## Building the image
 
-For our specific needs, the build script builds for the RaspberryPi 3. To build, go into the `image-builder` directory and run
+~~For our specific needs, the build script builds for the RaspberryPi 3. To build, go into the `image-builder` directory and run
 the `build_kegweather_image` script with root privileges. Good look getting the development environment running, I think you need
-to have qemu-system-aarch64, but I don't really know anymore, it's just luck to get it running, I think i used the command `qemu-system-aarch64 -M raspi3b -m 1024 -kernel ./vmlinuz -initrd ./initrd`.
+to have qemu-system-aarch64, but I don't really know anymore, it's just luck to get it running, I think i used the command `qemu-system-aarch64 -M raspi3b -m 1024 -kernel ./vmlinuz -initrd ./initrd`.~~
+Currently the image doesn't seem to work, so we are using an ubuntu image with all required settings, and copied the SD to an image, so we can restore it if it fails.
 
 ## Credits
 

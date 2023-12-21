@@ -1,11 +1,12 @@
-jinja2
-pillow
+jinja2==3.1.2
+pillow==10.0.1
 
-requests
-pysftp
-pytz
+requests==2.31.0
+get-mac==0.9.2
+pysftp==0.2.9
+pytz==2023.3.post1
 
-pydantic==2.1.1
-xmltodict
+pydantic==2.1.1 # DO NOT UPDATE, this is the latest version working with the code
+xmltodict==0.13.0
 
-py-typed-env
+py-typed-env==0.1.0

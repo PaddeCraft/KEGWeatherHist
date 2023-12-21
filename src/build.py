@@ -10,8 +10,9 @@ import json
 import time
 import shutil
 import socket
+import platform
 
-import pytz
+from getmac import get_mac_address
 
 from datetime import datetime, UTC
 
@@ -51,6 +52,11 @@ def getIP():
     return i
 
 
+# ---------------------------------------------------------------------------- #
+#                                  Main files                                  #
+# ---------------------------------------------------------------------------- #
+
+
 def build_files(path: str):
     # Render templates
     template_dir = os.path.join(APP_ROOT_PATH, "templates")
@@ -64,7 +70,6 @@ def build_files(path: str):
         elif f == "download.html":
             template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
         elif f == "meteoware.html":
-            template_vars["ip"] = getIP()
             template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
 
         jinja_env.get_template(f, globals=template_vars).stream().dump(
@@ -155,6 +160,114 @@ def build_files(path: str):
                         "direction": {"v": history.current_data.wind.direction},
                     },
                 },
+            },
+            f,
+            indent=4,
+        )
+
+
+# ---------------------------------------------------------------------------- #
+#                                  Status file                                 #
+# ---------------------------------------------------------------------------- #
+
+
+def build_status_file(directory: str, status: dict):
+    # --------------------------- Check for git updates -------------------------- #
+
+    git_status = {}
+
+    try:
+        # Based on this answer: https://stackoverflow.com/a/3278427
+
+        git_output_local = os.popen("git rev-parse @").read().strip()
+        git_output_remote = os.popen("git rev-parse @{u}").read().strip()
+        git_output_base = os.popen("git merge-base @ @{u}").read().strip()
+
+        git_status["up_to_date"] = git_output_local == git_output_remote
+        git_status["update_available"] = git_output_local == git_output_base
+        git_status["local_changes"] = git_output_remote == git_output_base
+
+        # If all are false, the branch is diverged
+        if all(not git_status[key] for key in git_status):
+            raise Exception("Diverged branch.")
+
+        git_current_commit = os.popen("git rev-parse HEAD").read().strip()
+        git_current_commit_message = os.popen("git log -1 --pretty=%B").read().strip()
+
+        git_status["commit"] = {
+            "hash": git_current_commit,
+            "message": git_current_commit_message,
+        }
+
+        git_status["error"] = False
+
+    except Exception as e:
+        git_status["error"] = True
+        git_status["error_message"] = str(e)
+
+    # ---------------------------------- Uptime ---------------------------------- #
+
+    last_reboot = None
+    uptime = None
+
+    try:
+        with open(os.path.join(APP_ROOT_PATH, "lastReboot.txt"), encoding="UTF-8") as f:
+            last_reboot = f.read().strip()
+    except Exception as e:
+        pass
+
+    try:
+        with open("/proc/uptime") as f:
+            uptime = float(f.read().strip().split(" ")[0])
+    except Exception as e:
+        pass
+
+    # ------------------------------- Machine info ------------------------------- #
+
+    machine_info = {}
+    try:
+        machine_info["arch"] = platform.machine()
+        machine_info["hostname"] = platform.node()
+        machine_info["identifier"] = platform.platform()
+        machine_info["platform"] = platform.system() + " " + platform.release()
+
+        machine_info["specs"] = {
+            "cores": os.cpu_count(),
+            "memory": os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES"),
+        }
+        machine_info["python"] = {
+            "version": platform.python_version(),
+            "implementation": platform.python_implementation(),
+        }
+    except Exception as e:
+        pass
+
+    hardware_info = {}
+    try:
+        with open("/proc/device-tree/model") as f:
+            board_name = f.read().strip()
+
+        hardware_info["board"] = board_name
+    except Exception as e:
+        pass
+
+    machine_info["hardware"] = hardware_info
+
+    # ------------------------------ Write the file ------------------------------ #
+
+    with open(os.path.join(directory, "status.json"), "w", encoding="UTF-8") as f:
+        json.dump(
+            {
+                "status": status,
+                "system": {
+                    "ip_addr": getIP(),
+                    "mac_addr": get_mac_address(),
+                    "last_reboot": last_reboot,
+                    "uptime": uptime,
+                    "platform": machine_info,
+                },
+                "git": git_status,
+                "timestamp": int(time.time()),
             },
             f,
             indent=4,
