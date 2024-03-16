@@ -16,12 +16,23 @@
     <body class="p-5 {% if embed %} bg-white dark:bg-white text-blue-950 dark:text-blue-950 {% endif %}">
         {% if not embed %}
         <div class="navbar bg-slate-300 dark:bg-slate-700 rounded-full">
-            <div class="flex-1">
+            <div class="flex-1" style="display: block;">
                 <a
                     class="btn btn-ghost rounded-full normal-case text-xl"
                     href="./"
+                    style="float: left;"
                     >KEG Amorbach &gt; Wetter
                 </a>
+                <div style="float: right; height: 3rem;width: 5rem; display: flex; justify-content: center; margin-right: 1vw;">
+                    <div style="border-radius: 3rem; width: 100%; background-color: #405169" ><div onclick="if(event.originalTarget.style.float == 'right'){event.originalTarget.style.float = 'left';event.originalTarget.innerHTML='&#x1F319;'}else{event.originalTarget.style.float = 'right';event.originalTarget.innerHTML='&#x1F31E;'}" style="height: 100%;
+                        border-radius: 100%;
+                        width: 50%;
+                        text-align: center;
+                        justify-content: center;
+                        display: flex;
+                        align-items: center;
+                        font-size: 2em;">&#x1F31E;</div></div>
+                </div>
             </div>
             <div class="avatar pr-1">
                 <div class="w-10 rounded-full">
@@ -106,15 +117,14 @@
                 {% if not embed %}
                 <p>Copyright &copy; KEG Amorbach. Alle Rechte vorbehalten.</p>
                 {% endif %}
-                <p>
-                    Programmiert von
+                <p style="display: flex; align-items: center;" >
+                    Programmiert von &nbsp;
                     <a href="https://github.com/NprogramDev" class="link"
                         >Noah Pani</a
-                    >
-                    und
+                    >&nbsp;
+                    und&nbsp;
                     <a href="https://github.com/PaddeCraft" class="link"
-                        >Patrick Ulbricht</a
-                    >
+                        >Patrick Ulbricht</a> <a href="https://nprogramdev.github.io/PdCrNPrg/"><img style="height: 3em; margin-left: 1em;" src="./static/pdCrNPrg.png" /></a>
                 </p>
                 <p>
                     Quellcode auf

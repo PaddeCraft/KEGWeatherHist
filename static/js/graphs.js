@@ -40,12 +40,6 @@ var chartData = [
                 color: [50, 168, 162],
             },
             {
-                call: data.getWindSpeed,
-                args: ["day"],
-                label: "Windgeschwindigkeit",
-                color: [194, 25, 152],
-            },
-            {
                 call: data.getRain,
                 args: ["day"],
                 label: "Regenmenge",

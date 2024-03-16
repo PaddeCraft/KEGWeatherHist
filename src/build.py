@@ -14,7 +14,7 @@ import platform
 
 from getmac import get_mac_address
 
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 
 def get_data(data_type: str, mode: str, allow_current: bool):
@@ -136,7 +136,7 @@ def build_files(path: str):
     file_path = os.path.join(path, "api", "meteoware-live.json")
     with open(file_path, "w", encoding="UTF-8") as f:
         # UTC timestamp
-        date = datetime.fromtimestamp(history.current_data_time, tz=UTC).strftime(
+        date = datetime.fromtimestamp(history.current_data_time, tz=timezone.utc).strftime(
             "%Y%m%d%H%M%S"
         )
 

@@ -1,0 +1,15 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}3{% endblock %}
+{% block tab_head %}
+<script src="./static/js/tab4.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<div data-tab="3">
+    <h2>Monats&uuml;bersicht</h2>
+    <canvas id="month-temp" class="w-full h-full"></canvas>
+    <canvas id="month-rain" class="w-full h-full"></canvas>
+    <canvas id="month-hum" class="w-full h-full"></canvas>
+    <canvas id="month-pre" class="w-full h-full"></canvas>
+    <canvas id="month-win" class="w-full h-full"></canvas>
+</div>
+{% endblock %}

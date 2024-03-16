@@ -1,0 +1,15 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}2{% endblock %}
+{% block tab_head %}
+<script src="./static/js/tab3.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<div  data-tab="2">
+    <h2>Wochen&uuml;bersicht</h2>
+    <canvas id="week-temp" class="w-full h-full"></canvas>
+    <canvas id="week-rain" class="w-full h-full"></canvas>
+    <canvas id="week-hum" class="w-full h-full"></canvas>
+    <canvas id="week-pre" class="w-full h-full"></canvas>
+    <canvas id="week-win" class="w-full h-full"></canvas>
+</div>
+{% endblock %}
