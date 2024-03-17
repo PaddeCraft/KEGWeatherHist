@@ -1,5 +1,8 @@
 {% extends "tabulator.html" %}
 {% block active_tab %}4{% endblock %}
+{% block tab_head %}
+<script src="../static/js/tab5.js" type="module"> </script>
+{% endblock %}
 {% block tab_content %}
 <div data-tab="4">
     <h2>&Uuml;ber das Projekt</h2>
@@ -24,11 +27,11 @@
 
     </p>
     <h3>Software Versionen:</h3>
-    <a href="./">Derzeitige</a>&nbsp;&nbsp;&nbsp;
-    <a href="./old.html">Vorherige Version</a>&nbsp;&nbsp;&nbsp;
-    <a href="./old/">Orginal Version</a>
+    <a href="../">Derzeitige</a>&nbsp;&nbsp;&nbsp;
+    <a href="../legacy/">Vorherige Version</a>&nbsp;&nbsp;&nbsp;
+    <a href="../original">Orginal Version</a>
     <h3>Technische Informationen</h3>
-    <p><span style="color: #20ff97">Neu</span>&nbsp;&nbsp;&nbsp;<span style="color: #ff207d">Ersetzt</span></p>
+    <p><span style="color: #20ff97">Neu</span>&nbsp;&nbsp;&nbsp;<span class="text-red-500">Ersetzt</span></p>
     <ul>
         <li><strong>Oregon Scientific WMR 200 Funk</strong></li>
         <li class="list-none">
@@ -73,7 +76,7 @@
                 <li style="color: #20ff97"> 
                     2x RaspberryPi 3b
                 </li>
-                <li style="color: #ff207d">
+                <li class="text-red-500">
                     Modellname: ALIX.1E Mainboard
                 </li>
             </ul>

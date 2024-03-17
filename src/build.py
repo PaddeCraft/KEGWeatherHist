@@ -63,17 +63,42 @@ def build_files(path: str):
     jinja_env = Environment(loader=FileSystemLoader(template_dir))
     for f in os.listdir(template_dir):
         template_vars = {}
+        localpath = path
         if f == "base.html":
             continue
-        elif f == "index.html":
+        elif f == "tabulator.html":
             template_vars["timestamp"] = int(time.time())
         elif f == "download.html":
             template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
         elif f == "meteoware.html":
             template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
-
+        rtfile = f
+        if f == "day.html":
+            localpath = os.path.join(path, "day")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "week.html":
+            localpath = os.path.join(path, "week")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "month.html":
+            localpath = os.path.join(path, "month")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "info.html":
+            localpath = os.path.join(path, "info")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "live.html":
+            localpath = os.path.join(path, "live")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f=="legacy.html":
+            localpath = os.path.join(path, "legacy")
+            rtfile = "index.html"
+            os.mkdir(localpath)
         jinja_env.get_template(f, globals=template_vars).stream().dump(
-            os.path.join(path, f)
+            os.path.join(localpath, rtfile)
         )
 
         if f == "index.html":

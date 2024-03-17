@@ -1,0 +1,52 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}0{% endblock %}
+{% block tab_head %}
+<script src="../static/js/tab1.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<noscript>
+    <h2>Liveübersicht</h2>
+   <h3>Leider kann hier ohne JavaScript nichts angezeigt werden. Die anderen Tabs funktionieren aber!</h3>
+</noscript>
+<div class="js_enabled" style="display: none;" data-tab="0">
+    <h2>Live&uuml;bersicht</h2>
+    <div></div>
+    <div class="pt-8 items-center">
+        <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
+            <span class="text-xl"
+                >Temperatur: <strong><span id="live_temp">--</span> &deg;C</span
+                ></strong>
+        </div>
+        <br />
+        <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
+            <span class="text-xl"
+                >Regenrate: <strong><span id="live_rain">--</span> mm/m<sup>2</sup></span
+                ></strong>
+        </div>
+        <br />
+        <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
+            <span class="text-xl"
+                >Luftdruck: <strong><span id="live_pressure">--</span> hpa</span
+                ></strong>
+        </div>
+        <br />
+        <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
+            <span class="text-xl"
+                >Windgeschwindigkeit: <strong><span id="live_windspeed">--</span> km/h</span
+                ></strong>
+        </div>
+        <br /><br />
+        <div
+            class="radial-progress"
+            style="--value: 70; --size: 14em"
+            id="winddir-main"
+            >
+            <span>
+            Windrichtung:
+            <span class="pl-2" id="winddir-text">--</span> &deg;
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

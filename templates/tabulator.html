@@ -3,40 +3,32 @@
 {% block head %}
 <!--Everything in the Head of the later HTML-->
 <!-- ------------------------------- Scripts ------------------------------- -->
-<script src="./static/js/chart.min.js"></script>
+<script src="../static/js/chart.min.js"></script>
 {% block tab_head %}{% endblock %}
 <script>window.data_update_time = {{ timestamp }};</script>
 {% endblock %}
 {% block content %}
-<!--If JS is not Enabled!-->
-<noscript>
-    <p class="pb-3 text-xl">F&uuml;r eine bessere Erfahrung, schalten Sie JavaScript ein und laden Sie die Seite neu.</p>
-    <img src="./api/img/temperature/month.jpg" alt="Temperatur Monat">
-    <img src="./api/img/rain/month.jpg" alt="Regen Monat">
-    <img src="./api/img/pressure/month.jpg" alt="Luftdruck Monat">
-    <img src="./api/img/wind_speed/month.jpg" alt="Windgeschwindigkeit Monat">
-</noscript>
 <div id="info_last_updated" class="pb-3 text-red-500 text-xl">
 </div>
-<div id="js_enabled" style="display: none;">
+<div>
     <div class="tabsjs prose" data-classtoggle="tab-active">
         <!--Tabs-->
         <div class="tabs">
-            <a href="/" style="text-decoration: none;"
+            <a href="../live" style="text-decoration: none;"
                 class="tab tab-bordered tabsjs-sel"
                 data-tab="0"
                 >Live&uuml;bersicht
         </a>
-            <a  href="/tab2.html" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="1"
+            <a  href="../day" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="1"
                 >Tages&uuml;bersicht
     </a>
-            <a href="/tab3.html" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="2"
+            <a href="../week" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="2"
                 >Wochen&uuml;bersicht
 </a>
-            <a href="/tab4.html" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="3"
+            <a href="../month" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="3"
                 >Monats&uuml;bersicht
 </a>
-            <a href="/tab5.html" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="4"
+            <a href="../info" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="4"
                 >Informationen
 </a>
         </div>
@@ -52,7 +44,4 @@
         {% endblock %}
     </div>
 </div>
-<script>
-    document.getElementById("js_enabled").style.display = null;
-</script>
 {% endblock %}

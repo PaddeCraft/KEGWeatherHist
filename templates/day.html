@@ -1,0 +1,26 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}1{% endblock %}
+{% block tab_head %}
+<script src="../static/js/tab2.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<!--If JS is not Enabled!-->
+<noscript>
+    <h3>
+        Tag
+    </h3>
+    <p class="pb-3 text-xl">F&uuml;r eine bessere Erfahrung, schalten Sie JavaScript ein und laden Sie die Seite neu.</p>
+    <img src="../api/img/temperature/day.jpg" alt="Temperatur Monat">
+    <img src="../api/img/rain/day.jpg" alt="Regen Monat">
+    <img src="../api/img/pressure/day.jpg" alt="Luftdruck Monat">
+    <img src="../api/img/wind_speed/day.jpg" alt="Windgeschwindigkeit Monat">
+</noscript>
+<div class="js_enabled" style="display: none;"  data-tab="1">
+    <h2>Tages&uuml;bersicht</h2>
+    <canvas id="day-temp" class="w-full h-full"></canvas>
+    <canvas id="day-rain" class="w-full h-full"></canvas>
+    <canvas id="day-hum" class="w-full h-full"></canvas>
+    <canvas id="day-pre" class="w-full h-full"></canvas>
+    <canvas id="day-win" class="w-full h-full"></canvas>
+</div>
+{% endblock %}
