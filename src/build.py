@@ -67,36 +67,50 @@ def build_files(path: str):
         if f == "base.html":
             continue
         elif f == "tabulator.html":
-            template_vars["timestamp"] = int(time.time())
-        elif f == "download.html":
-            template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
+            continue
         elif f == "meteoware.html":
             template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
         rtfile = f
         if f == "day.html":
+            template_vars["timestamp"] = int(time.time())
             localpath = os.path.join(path, "day")
             rtfile = "index.html"
             os.mkdir(localpath)
         elif f == "week.html":
+            template_vars["timestamp"] = int(time.time())
             localpath = os.path.join(path, "week")
             rtfile = "index.html"
             os.mkdir(localpath)
         elif f == "month.html":
+            template_vars["timestamp"] = int(time.time())
             localpath = os.path.join(path, "month")
             rtfile = "index.html"
             os.mkdir(localpath)
         elif f == "info.html":
+            template_vars["timestamp"] = int(time.time())
             localpath = os.path.join(path, "info")
             rtfile = "index.html"
             os.mkdir(localpath)
         elif f == "live.html":
+            template_vars["timestamp"] = int(time.time())
             localpath = os.path.join(path, "live")
             rtfile = "index.html"
             os.mkdir(localpath)
-        elif f=="legacy.html":
+        elif f == "legacy.html":
             localpath = os.path.join(path, "legacy")
             rtfile = "index.html"
             os.mkdir(localpath)
+        elif f == "api_index.html":
+            template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
+            localpath = os.path.join(path, "api")
+            rtfile = "index.html"
+            if not os.path.exists(localpath):
+                os.mkdir(localpath)
+        elif f == "api_docs.html":
+            localpath = os.path.join(path, "api")
+            rtfile = "docs.html"
+            if not os.path.exists(localpath):
+                os.mkdir(localpath)
         jinja_env.get_template(f, globals=template_vars).stream().dump(
             os.path.join(localpath, rtfile)
         )
@@ -156,14 +170,18 @@ def build_files(path: str):
 
     file_path = os.path.join(path, "api", "all.json")
     with open(file_path, "w", encoding="UTF-8") as f:
-        json.dump(history.current_data.model_dump(), f, indent=4)
+        json.dump(
+            {**history.current_data.model_dump(), "timestamp": int(time.time())},
+            f,
+            indent=4,
+        )
 
     file_path = os.path.join(path, "api", "meteoware-live.json")
     with open(file_path, "w", encoding="UTF-8") as f:
         # UTC timestamp
-        date = datetime.fromtimestamp(history.current_data_time, tz=timezone.utc).strftime(
-            "%Y%m%d%H%M%S"
-        )
+        date = datetime.fromtimestamp(
+            history.current_data_time, tz=timezone.utc
+        ).strftime("%Y%m%d%H%M%S")
 
         json.dump(
             {

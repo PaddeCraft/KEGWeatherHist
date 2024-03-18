@@ -1,36 +1,22 @@
-{% extends "base.html" %}
-{% block title %}Überblick{% endblock %}
-{% block head %}
+{% extends "base.html" %} {% block title %}Überblick{% endblock %} {% block head %}
 <!--Everything in the Head of the later HTML-->
 <!-- ------------------------------- Scripts ------------------------------- -->
 <script src="../static/js/chart.min.js"></script>
 {% block tab_head %}{% endblock %}
-<script>window.data_update_time = {{ timestamp }};</script>
-{% endblock %}
-{% block content %}
-<div id="info_last_updated" class="pb-3 text-red-500 text-xl">
-</div>
+<script>
+    window.data_update_time = parseInt(`{{ timestamp }}`);
+</script>
+{% endblock %} {% block content %}
+<div id="info_last_updated" class="pb-3 text-red-500 text-xl"></div>
 <div>
     <div class="tabsjs prose" data-classtoggle="tab-active">
         <!--Tabs-->
         <div class="tabs">
-            <a href="../live" style="text-decoration: none;"
-                class="tab tab-bordered tabsjs-sel"
-                data-tab="0"
-                >Live&uuml;bersicht
-        </a>
-            <a  href="../day" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="1"
-                >Tages&uuml;bersicht
-    </a>
-            <a href="../week" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="2"
-                >Wochen&uuml;bersicht
-</a>
-            <a href="../month" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="3"
-                >Monats&uuml;bersicht
-</a>
-            <a href="../info" style="text-decoration: none;" class="tab tab-bordered tabsjs-sel" data-tab="4"
-                >Informationen
-</a>
+            <a href="../live" style="text-decoration: none" class="tab tab-bordered tabsjs-sel" data-tab="0">Live&uuml;bersicht </a>
+            <a href="../day" style="text-decoration: none" class="tab tab-bordered tabsjs-sel" data-tab="1">Tages&uuml;bersicht </a>
+            <a href="../week" style="text-decoration: none" class="tab tab-bordered tabsjs-sel" data-tab="2">Wochen&uuml;bersicht </a>
+            <a href="../month" style="text-decoration: none" class="tab tab-bordered tabsjs-sel" data-tab="3">Monats&uuml;bersicht </a>
+            <a href="../info" style="text-decoration: none" class="tab tab-bordered tabsjs-sel" data-tab="4">Informationen </a>
         </div>
         <script>
             let activeTab = {% block active_tab %}{% endblock %};
@@ -40,8 +26,7 @@
                 }
             });
         </script>
-        {% block tab_content %}
-        {% endblock %}
+        {% block tab_content %} {% endblock %}
     </div>
 </div>
 {% endblock %}

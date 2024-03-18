@@ -12,7 +12,6 @@
     <!-- -------------------------------- Style -------------------------------- -->
     <link rel="stylesheet" href="../static/fonts/fonts.css" type="text/css" />
     <link rel="stylesheet" href="../static/css/main.css" type="text/css" />
-    <link rel="stylesheet" href="../static/css/ab.css" type="text/css" />
     {% block head %}{% endblock %}
     </style>
 
@@ -20,21 +19,12 @@
     {% if not embed %}
     <div class="navbar bg-slate-300 dark:bg-slate-700 rounded-full">
         <div class="flex-1" style="display: block;">
-            <a class="btn btn-ghost rounded-full normal-case text-xl" href="../" style="float: left;">KEG Amorbach &gt;
+            <a class="btn btn-ghost rounded-full normal-case text-xl float-left" href="../">KEG Amorbach &gt;
                 Wetter
             </a>
-            <div style="float: right; height: 3rem;width: 5rem; justify-content: center; margin-right: 1vw;"
-                class="flex">
-                <div id="switchTheme" style="border-radius: 3rem; width: 100%; background-color: #405169">
-                    <div id="switchThemeInner"
-                        style="height: 100%;
-                        border-radius: 100%;
-                        width: 50%;
-                        text-align: center;
-                        justify-content: center;
-                        display: flex;
-                        align-items: center;
-                        font-size: 2em;">&#x1F31E;</div>
+            <div style="float: right;" class="flex h-[3rem] w-[5rem] justify-center mr-[1vw]">
+                <div id="switchTheme" class="w-full rounded-full bg-[#405169]">
+                    <div id="switchThemeInner" class="h-full rounded-full w-[50%] text-center justify-center flex items-center"></div>
                 </div>
             </div>
         </div>
@@ -50,10 +40,10 @@
     <footer
         class="footer footer-center p-8 bg-slate-300 text-base-content rounded-lg {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
         <div>
-            <a href="../download.html" class="link link-hover">Wetterdaten herunterladen
+            <a href="../api/" class="link link-hover">Wetterdaten herunterladen
             </a>
             {% if not embed %}
-            <a href="../api_docs.html" class="link link-hover">API-Dokumentation
+            <a href="../api/docs.html" class="link link-hover">API-Dokumentation
             </a>
             <a href="https://www.amorgym.de/impressum/" class="link link-hover">Impressum
             </a>
@@ -94,9 +84,7 @@
                 Programmiert von &nbsp;
                 <a href="https://github.com/NprogramDev" class="link">Noah Pani</a>&nbsp;
                 und&nbsp;
-                <a href="https://github.com/PaddeCraft" class="link">Patrick Ulbricht</a> <a
-                    href="https://nprogramdev.github.io/PdCrNPrg/"><img style="height: 3em; margin-left: 1em;"
-                        src="../static/pdCrNPrg.png" /></a>
+                <a href="https://github.com/PaddeCraft" class="link">Patrick Ulbricht</a> 
             </p>
             <p>
                 Quellcode auf
@@ -106,5 +94,8 @@
         </div>
     </footer>
     <script src="../static/js/switchTheme.js"></script>
+    <a class="fixed bottom-0 right-0 p-5"
+                    href="https://nprogramdev.github.io/PdCrNPrg/"><img class="h-[3em] aspect-square rounded"
+                        src="../static/pdCrNPrg.png" /></a>
 </body>
 </html>
