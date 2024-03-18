@@ -1,155 +1,29 @@
-{% extends "base.html" %}
-{% block title %}Überblick{% endblock %}
-{% block head %}
-<!-- ------------------------------- Scripts ------------------------------- -->
-<script src="./static/js/chart.min.js"></script>
-<script src="./static/js/tabs.js" defer></script>
-<script src="./static/js/graphs.js" type="module"></script>
-<script>window.data_update_time = {{ timestamp }};</script>
-{% endblock %}
-{% block content %}
-<noscript>
-    <p class="pb-3 text-xl">F&uuml;r eine bessere Erfahrung, schalten Sie JavaScript ein und laden Sie die Seite neu.</p>
-    <img src="./api/img/temperature/month.jpg" alt="Temperatur Monat">
-    <img src="./api/img/rain/month.jpg" alt="Regen Monat">
-    <img src="./api/img/pressure/month.jpg" alt="Luftdruck Monat">
-    <img src="./api/img/wind_speed/month.jpg" alt="Windgeschwindigkeit Monat">
-</noscript>
-<div id="info_last_updated" class="pb-3 text-red-500 text-xl">
-</div>
-<div id="js_enabled" style="display: none;">
-    <div class="tabsjs prose" data-classtoggle="tab-active">
-        <div class="tabs">
-            <span
-                class="tab tab-bordered tabsjs-sel tab-active"
-                data-tab="0"
-                >Live&uuml;bersicht
-            </span>
-            <span class="tab tab-bordered tabsjs-sel" data-tab="1"
-                >Tages&uuml;bersicht
-            </span>
-            <span class="tab tab-bordered tabsjs-sel" data-tab="2"
-                >Wochen&uuml;bersicht
-            </span>
-            <span class="tab tab-bordered tabsjs-sel" data-tab="3"
-                >Monats&uuml;bersicht
-            </span>
-            <span class="tab tab-bordered tabsjs-sel" data-tab="4"
-                >Informationen
-            </span>
-        </div>
-        <div class="tabsjs-tab" data-tab="0">
-            <h2>Live&uuml;bersicht</h2>
-            <div></div>
-            <div class="pt-8 items-center">
-                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
-                    <span class="text-xl"
-                        >Temperatur: <strong><span id="live_temp">--</span> &deg;C</span
-                        ></strong>
-                </div>
-                <br />
-                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
-                    <span class="text-xl"
-                        >Regenrate: <strong><span id="live_rain">--</span> mm/m<sup>2</sup></span
-                        ></strong>
-                </div>
-                <br />
-                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
-                    <span class="text-xl"
-                        >Luftdruck: <strong><span id="live_pressure">--</span> hpa</span
-                        ></strong>
-                </div>
-                <br />
-                <div class="bg-slate-300 rounded-lg p-3 {% if embed %} dark:bg-slate-300 {% else %} dark:bg-slate-700 {% endif %}">
-                    <span class="text-xl"
-                        >Windgeschwindigkeit: <strong><span id="live_windspeed">--</span> km/h</span
-                        ></strong>
-                </div>
-                <br /><br />
-                <div
-                    class="radial-progress"
-                    style="--value: 70; --size: 14em"
-                    id="winddir-main"
-                    >
-                    <span>
-                    Windrichtung:
-                    <span class="pl-2" id="winddir-text">--</span> &deg;
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="tabsjs-tab" data-tab="1">
-            <h2>Tages&uuml;bersicht</h2>
-            <canvas id="day" class="w-full h-full"></canvas>
-        </div>
-        <div class="tabsjs-tab" data-tab="2">
-            <h2>Wochen&uuml;bersicht</h2>
-            <canvas id="week" class="w-full h-full"></canvas>
-        </div>
-        <div class="tabsjs-tab" data-tab="3">
-            <h2>Monats&uuml;bersicht</h2>
-            <canvas id="month" class="w-full h-full"></canvas>
-        </div>
-        <div class="tabsjs-tab" data-tab="4">
-            <h2>&Uuml;ber das Projekt</h2>
-            <p>
-                Im Rahmen des Projektsseminars 	
-                &quot;Errichtung einer
-                Wetterstation&quot; der Schuljahre 2012-2014 bauten Sch&uuml;lerinnen
-                und Sch&uuml;ler der 12. Klasse eine funktionst&uuml;chtige
-                Wetterstation auf dem Schulgel&auml;nde des Karl-Ernst-Gymnasiums
-                Amorbach.
-            </p>
-            <p>
-                Im Jahr 2022 wurde die Wetterstation im Rahmen einer
-                Projektwoche wiederaufbereitet. Geholfen haben verschiedene
-                Sch&uuml;lerinnen und Sch&uuml;ler aus der Unter- und Mittelstufe.
-            </p>
-            <h3>Technische Informationen</h3>
-            <ul>
-                <li><strong>Oregon Scientific WMR 200 Funk</strong></li>
-                <li class="list-none">
-                    <ul>
-                        <li>Innenstation mit Datenlogger</li>
-                        <li>Regenmesser PCR800</li>
-                        <li>Windmesser WGR800</li>
-                        <li>Solarpanel STC800</li>
-                        <li>
-                            Temperatur- und Luftfeuchtigkeitsmesser THGN801
-                        </li>
-                    </ul>
-                </li>
-                <li><strong>Erhobene Daten</strong></li>
-                <li class="list-none">
-                    <ul>
-                        <li>Temperatur</li>
-                        <li>Luftfeuchtigkeit</li>
-                        <li>Luftdruck</li>
-                        <li>Regenmenge</li>
-                        <li>Windgeschwindigkeit</li>
-                        <li>Windrichtung</li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Zeitintervall der erhobenen Daten</strong>
-                </li>
-                <li class="list-none">
-                    <ul>
-                        <li>Live-Daten (1 Tag)</li>
-                        <li>1 Woche</li>
-                        <li>1 Monat</li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>
-                    Wetter-Server: RaspberryPi 3
-                    </strong>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-<script>
-    document.getElementById("js_enabled").style.display = null;
-</script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='refresh' content='0; URL=./live'>
+    <title>Weitergeleitet auf Seite: http://amorkeg.de/wetter/live</title>
+</head>
+<body>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #1d232a;
+            color: white;
+        }
+        a:visited, a:link, a:active{
+            color: white;
+        }
+    </style>
+    <a href="./live">You should be redirected to: http://amorkeg.de/wetter/live</a>
+    <div>&nbsp;</div>
+    <a href="./live">Du solltest folgende Seite weitergeleitet werden: http://amorkeg.de/wetter/live</a>
+</body>
+</html>

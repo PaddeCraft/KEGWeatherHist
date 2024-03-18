@@ -1,0 +1,87 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}4{% endblock %}
+{% block tab_head %}
+<script src="../static/js/tab5.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<div data-tab="4">
+    <h2>&Uuml;ber das Projekt</h2>
+    <p>
+        Im Rahmen des Projektsseminars
+        &quot;Errichtung einer
+        Wetterstation&quot; der Schuljahre 2012-2014 bauten Sch&uuml;lerinnen
+        und Sch&uuml;ler der 12. Klasse eine funktionst&uuml;chtige
+        Wetterstation auf dem Schulgel&auml;nde des Karl-Ernst-Gymnasiums
+        Amorbach.
+    </p>
+    <p>
+        Im Jahr 2022 wurde die Wetterstation im Rahmen einer
+        Projektwoche handwerklich wiederaufbereitet. Geholfen haben verschiedene
+        Sch&uuml;lerinnen und Sch&uuml;ler aus der Unter- und Mittelstufe.
+    </p>
+    <p>
+        Im Jahr 2023/24 haben die beiden Schüler <a href="https://github.com/NprogramDev" class="link">Noah
+            Pani</a>&nbsp;
+        und&nbsp;
+        <a href="https://github.com/PaddeCraft" class="link">Patrick Ulbricht</a> die Software und die Server-Rechner erneuert, da diese nicht mehr funktioniert haben.
+
+    </p>
+    <h3>Software Versionen:</h3>
+    <a href="../">Derzeitige</a>&nbsp;&nbsp;&nbsp;
+    <a href="../legacy/">Vorherige Version</a>&nbsp;&nbsp;&nbsp;
+    <a href="../original">Orginal Version</a>
+    <h3>Technische Informationen</h3>
+    <p><span class="text-[#20ff97]">Neu</span>&nbsp;&nbsp;&nbsp;<span class="text-red-500">Ersetzt</span></p>
+    <ul>
+        <li><strong>Oregon Scientific WMR 200 Funk</strong></li>
+        <li class="list-none">
+            <ul>
+                <li>Innenstation mit Datenlogger</li>
+                <li>Regenmesser PCR800</li>
+                <li>Windmesser WGR800</li>
+                <li>Solarpanel STC800</li>
+                <li>
+                    Temperatur- und Luftfeuchtigkeitsmesser THGN801
+                </li>
+            </ul>
+        </li>
+        <li><strong>Erhobene Daten</strong></li>
+        <li class="list-none">
+            <ul>
+                <li>Temperatur</li>
+                <li>Luftfeuchtigkeit</li>
+                <li>Luftdruck</li>
+                <li>Regenmenge</li>
+                <li>Windgeschwindigkeit</li>
+                <li>Windrichtung</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Zeitintervall der erhobenen Daten</strong>
+        </li>
+        <li class="list-none">
+            <ul>
+                <li>Live-Daten (1 Tag)</li>
+                <li>1 Woche</li>
+                <li>1 Monat</li>
+            </ul>
+        </li>
+        <li>
+            <strong>
+                Upload-Server
+            </strong>
+        </li>
+        <li class="list-none">
+            <ul>
+                <li class="text-[#20ff97]"> 
+                    2x RaspberryPi 3b
+                </li>
+                <li class="text-red-500">
+                    Modellname: ALIX.1E Mainboard
+                </li>
+            </ul>
+            
+        </li>
+    </ul>
+</div>
+{% endblock %}

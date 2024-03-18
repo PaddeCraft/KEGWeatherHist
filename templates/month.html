@@ -1,0 +1,27 @@
+{% extends "tabulator.html" %}
+{% block active_tab %}3{% endblock %}
+{% block tab_head %}
+<script src="../static/js/tab4.js" type="module"> </script>
+{% endblock %}
+{% block tab_content %}
+<!--If JS is not Enabled!-->
+<noscript>
+    <h3>
+        Monat
+    </h3>
+    <p class="pb-3 text-xl">F&uuml;r eine bessere Erfahrung, schalten Sie JavaScript ein und laden Sie die Seite neu.</p>
+    <img src="../api/img/temperature/month.jpg" alt="Temperatur Monat">
+    <img src="../api/img/rain/month.jpg" alt="Regen Monat">
+    <img src="../api/img/pressure/month.jpg" alt="Luftdruck Monat">
+    <img src="../api/img/wind_speed/month.jpg" alt="Windgeschwindigkeit Monat">
+</noscript>
+<!--Inline Style is necessary because it is changed by JS - Removed by JS-->
+<div class="js_enabled" style="display: none;" data-tab="3">
+    <h2>Monats&uuml;bersicht</h2>
+    <canvas id="month-temp" class="w-full h-full"></canvas>
+    <canvas id="month-rain" class="w-full h-full"></canvas>
+    <canvas id="month-hum" class="w-full h-full"></canvas>
+    <canvas id="month-pre" class="w-full h-full"></canvas>
+    <canvas id="month-win" class="w-full h-full"></canvas>
+</div>
+{% endblock %}

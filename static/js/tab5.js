@@ -1,0 +1,1 @@
+// This JS File is imported by the information page, where no JS is needed.

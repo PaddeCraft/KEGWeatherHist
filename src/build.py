@@ -14,7 +14,7 @@ import platform
 
 from getmac import get_mac_address
 
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 
 def get_data(data_type: str, mode: str, allow_current: bool):
@@ -63,17 +63,56 @@ def build_files(path: str):
     jinja_env = Environment(loader=FileSystemLoader(template_dir))
     for f in os.listdir(template_dir):
         template_vars = {}
+        localpath = path
         if f == "base.html":
             continue
-        elif f == "index.html":
-            template_vars["timestamp"] = int(time.time())
-        elif f == "download.html":
-            template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
+        elif f == "tabulator.html":
+            continue
         elif f == "meteoware.html":
             template_vars["interval"] = env.get("UPLOAD_INTERVAL", 5)
-
+        rtfile = f
+        if f == "day.html":
+            template_vars["timestamp"] = int(time.time())
+            localpath = os.path.join(path, "day")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "week.html":
+            template_vars["timestamp"] = int(time.time())
+            localpath = os.path.join(path, "week")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "month.html":
+            template_vars["timestamp"] = int(time.time())
+            localpath = os.path.join(path, "month")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "info.html":
+            template_vars["timestamp"] = int(time.time())
+            localpath = os.path.join(path, "info")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "live.html":
+            template_vars["timestamp"] = int(time.time())
+            localpath = os.path.join(path, "live")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "legacy.html":
+            localpath = os.path.join(path, "legacy")
+            rtfile = "index.html"
+            os.mkdir(localpath)
+        elif f == "api_index.html":
+            template_vars["downloads"] = DOWNLOAD_LIST_POSSIBILITIES
+            localpath = os.path.join(path, "api")
+            rtfile = "index.html"
+            if not os.path.exists(localpath):
+                os.mkdir(localpath)
+        elif f == "api_docs.html":
+            localpath = os.path.join(path, "api")
+            rtfile = "docs.html"
+            if not os.path.exists(localpath):
+                os.mkdir(localpath)
         jinja_env.get_template(f, globals=template_vars).stream().dump(
-            os.path.join(path, f)
+            os.path.join(localpath, rtfile)
         )
 
         if f == "index.html":
@@ -131,14 +170,18 @@ def build_files(path: str):
 
     file_path = os.path.join(path, "api", "all.json")
     with open(file_path, "w", encoding="UTF-8") as f:
-        json.dump(history.current_data.model_dump(), f, indent=4)
+        json.dump(
+            {**history.current_data.model_dump(), "timestamp": int(time.time())},
+            f,
+            indent=4,
+        )
 
     file_path = os.path.join(path, "api", "meteoware-live.json")
     with open(file_path, "w", encoding="UTF-8") as f:
         # UTC timestamp
-        date = datetime.fromtimestamp(history.current_data_time, tz=UTC).strftime(
-            "%Y%m%d%H%M%S"
-        )
+        date = datetime.fromtimestamp(
+            history.current_data_time, tz=timezone.utc
+        ).strftime("%Y%m%d%H%M%S")
 
         json.dump(
             {
