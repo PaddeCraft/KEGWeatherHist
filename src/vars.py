@@ -47,7 +47,7 @@ for data_type in [
             DOWNLOAD_LIST_POSSIBILITIES.append(
                 {
                     "name": f"{data_format['name']} ({data_type['name']}, {mode['name']})",
-                    "link": f"./api/{'img/' if data_format['format'] == 'image' else ''}{data_type['type']}/{mode['mode']}."
+                    "link": f"../api/{'img/' if data_format['format'] == 'image' else ''}{data_type['type']}/{mode['mode']}."
                     + ("json" if data_format["format"] == "json" else "jpg"),
                 }
             )
