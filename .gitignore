@@ -5,6 +5,7 @@
 weather_history.pickle
 export
 lastReboot.txt
+start
 
 # ---------------------------------------------------------------------------- #
 #                             Javascript gitignore                             #
