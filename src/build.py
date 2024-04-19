@@ -57,7 +57,7 @@ def getIP():
 # ---------------------------------------------------------------------------- #
 
 
-def build_files(path: str):
+def build_templates(path: str):
     # Render templates
     template_dir = os.path.join(APP_ROOT_PATH, "templates")
     jinja_env = Environment(loader=FileSystemLoader(template_dir))
@@ -125,6 +125,8 @@ def build_files(path: str):
     static_dir = os.path.join(APP_ROOT_PATH, "static")
     shutil.copytree(static_dir, os.path.join(path, "static"))
 
+
+def build_data_files(path: str):
     # Generate data json and graphs
     # Located in /api/<kind>/<span>
     for combination in ALL_DATA_COMBINATIONS:

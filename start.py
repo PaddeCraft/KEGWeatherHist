@@ -1,4 +1,4 @@
-from src.build import build_files, build_status_file
+from src.build import build_data_files, build_templates, build_status_file
 from src.data import history, WeatherData
 from src.meteohub import fmt_data
 from src.env import env
@@ -10,10 +10,11 @@ from tempfile import TemporaryDirectory
 
 
 status = {"code": "operational", "message": "Everything is fine."}
+first_run = True
 
 
 def loop():
-    global status
+    global status, first_run
 
     data_fetch_success = False
 
@@ -49,7 +50,11 @@ def loop():
         with TemporaryDirectory() as tmp_dir:
             try:
                 if data_fetch_success:
-                    build_files(tmp_dir)
+                    if first_run:
+                        build_templates(tmp_dir)
+                        first_run = False
+
+                    build_data_files(tmp_dir)
             except Exception as e:
                 status["code"] = "build_exception"
                 status["message"] = str(e)
