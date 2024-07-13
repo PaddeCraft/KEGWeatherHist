@@ -2,6 +2,17 @@ Array.from(document.getElementsByClassName("js_enabled")).forEach((el) => {
     el.style.display = "block";
 });
 
+let currentDataBuffer = null;
+
+export async function getCurrent() {
+    if (currentDataBuffer == null) {
+        currentDataBuffer = await (await fetch("../api/all.json")).json();
+    }
+    return currentDataBuffer;
+}
+export async function resetCurrent() {
+    currentDataBuffer = null;
+}
 export async function getTemperature(span) {
     return await (await fetch("../api/temperature/" + span + ".json")).json();
 }
