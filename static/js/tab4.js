@@ -81,6 +81,7 @@ var chartData = [
 
 async function updateData() {
     updatingData = true;
+    data.resetCurrent();
     console.info("Updating data");
     console.time("update_data");
 
@@ -143,14 +144,15 @@ async function updateData() {
         });
     });
     updatingData = false;
-}
-
+    
+const uploadTimestamp = (await data.getCurrent()).timestamp;
 const e = document.getElementById("info_last_updated");
 const CRITICAL_LAST_UPDATE_THRESHOLD = 60 * 60; // 1 hour
 if (
-    (window.data_update_time + CRITICAL_LAST_UPDATE_THRESHOLD) * 1000 <
+    (uploadTimestamp + CRITICAL_LAST_UPDATE_THRESHOLD) * 1000 <
     Date.now()
 ) {
-    const date = new Date(window.data_update_time * 1000);
+    const date = new Date(uploadTimestamp * 1000);
     e.innerText = `Die Daten wurden zuletzt am ${date.toLocaleDateString()} um ${date.toLocaleTimeString()} aktualisiert. Hier angezeigte Daten können veraltet sein.`;
+}
 }
