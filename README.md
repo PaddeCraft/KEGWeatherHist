@@ -1,3 +1,8 @@
+# UNMAINTAINED!
+
+> [!IMPORTANT]
+> This project is **no longer used and not maintained**. It could still work, but **expect things to break or for security vulnerabilities** to exist.
+
 # KEGWeatherHist
 
 ## Prerequisites
