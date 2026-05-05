@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - reachable meteohub instance
-- FTF-server and its credentials
+- FTP-server and its credentials
 - any device to run this software on (needs to have python installed)
 
 ## Installing the requirements
